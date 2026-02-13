@@ -21,12 +21,10 @@ public class Crew {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Зв'язок One-to-One з Flight (власник зв'язку – Crew)
     @OneToOne
     @JoinColumn(name = "flight_id", nullable = false, unique = true)
     private Flight flight;
 
-    // Зв'язок One-to-Many з CrewMember
     @OneToMany(mappedBy = "crew", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<CrewMember> members = new ArrayList<>();
@@ -36,29 +34,16 @@ public class Crew {
             columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
-    // ============ БІЗНЕС-МЕТОДИ ============
-
-    /**
-     * Додає члена бригади та встановлює двосторонній зв'язок.
-     */
     public void addMember(CrewMember member) {
         members.add(member);
         member.setCrew(this);
     }
 
-    /**
-     * Видаляє члена бригади та розриває зв'язок.
-     */
     public void removeMember(CrewMember member) {
         members.remove(member);
         member.setCrew(null);
     }
 
-    /**
-     * ВИПРАВЛЕНО: Перевіряє, чи бригада укомплектована.
-     * Раніше перевірялася лише кількість членів (>=4), що було помилкою.
-     * Тепер перевіряється наявність усіх чотирьох обов'язкових ролей.
-     */
     public boolean isFullyCrewed() {
         boolean hasPilot = members.stream().anyMatch(m -> m.getRole() == CrewRole.PILOT);
         boolean hasNavigator = members.stream().anyMatch(m -> m.getRole() == CrewRole.NAVIGATOR);

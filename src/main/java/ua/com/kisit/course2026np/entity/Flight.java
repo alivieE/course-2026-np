@@ -53,12 +53,10 @@ public class Flight {
     @Builder.Default
     private FlightStatus status = FlightStatus.PLANNED;
 
-    // Зв'язок Many-to-One з User (користувач, який створив рейс)
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Зв'язок One-to-One з Crew (один рейс – одна бригада)
     @OneToOne(mappedBy = "flight", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Crew brigade;
 
@@ -72,12 +70,6 @@ public class Flight {
             columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    // ============ БІЗНЕС-МЕТОДИ ============
-
-    /**
-     * Зміна статусу рейсу з перевіркою допустимості переходу.
-     * Завершені та скасовані рейси не можна змінювати.
-     */
     public void changeStatus(FlightStatus newStatus) {
         if (this.status == FlightStatus.COMPLETED || this.status == FlightStatus.CANCELLED) {
             throw new IllegalStateException("Неможливо змінити статус після завершення або скасування рейсу");
@@ -85,24 +77,14 @@ public class Flight {
         this.status = newStatus;
     }
 
-    /**
-     * Тривалість польоту в хвилинах.
-     */
     public long getDuration() {
         return Duration.between(departureTime, arrivalTime).toMinutes();
     }
 
-    /**
-     * Перевірка, чи рейс затримується (поточний час > час вильоту).
-     */
     public boolean isDelayed() {
         return LocalDateTime.now().isAfter(departureTime);
     }
 
-    /**
-     * Автоматичне оновлення статусу на DELAYED, якщо рейс ще не вилетів,
-     * але час вильоту вже минув.
-     */
     public void checkAndUpdateDelay() {
         if (isDelayed() && this.status == FlightStatus.PLANNED) {
             this.status = FlightStatus.CANCELLED; // або можна розширити enum, додавши DELAYED

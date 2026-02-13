@@ -51,4 +51,8 @@ public class Crew {
         boolean hasStewardess = members.stream().anyMatch(m -> m.getRole() == CrewRole.STEWARDESS);
         return hasPilot && hasNavigator && hasRadioOperator && hasStewardess;
     }
+
+    public void setFlightId(Integer flightId) {
+
+    }
 }

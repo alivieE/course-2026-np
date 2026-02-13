@@ -8,17 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-
-    // Пошук за email (для автентифікації)
+public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
-
-    // Всі активні користувачі
     List<User> findByIsActiveTrue();
-
-    // Користувачі за роллю (ADMIN / DISPATCHER)
     List<User> findByRole(String role);
-
-    // Перевірка унікальності email
     boolean existsByEmail(String email);
 }

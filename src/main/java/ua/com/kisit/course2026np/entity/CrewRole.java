@@ -1,5 +1,8 @@
 package ua.com.kisit.course2026np.entity;
 
 public enum CrewRole {
-    PILOT, NAVIGATOR, RADIO_OPERATOR, STEWARDESS
+    PILOT,           // Пілот
+    NAVIGATOR,       // Штурман
+    RADIO_OPERATOR,  // Радист
+    STEWARDESS       // Стюардеса
 }

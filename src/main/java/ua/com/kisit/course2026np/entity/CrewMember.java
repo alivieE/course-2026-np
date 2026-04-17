@@ -45,11 +45,11 @@ public class CrewMember {
     @Column(name = "role", nullable = false)
     private CrewRole role;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crew_id", nullable = false)
     private Crew crew;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "current_flight_id")
     private Flight currentFlight;
 

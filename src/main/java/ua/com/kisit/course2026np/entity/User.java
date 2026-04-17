@@ -69,7 +69,7 @@ public class User {
     private LocalDateTime updatedAt;
 
     // Зв'язок One-to-Many з Flight (один користувач створює багато рейсів)
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Builder.Default
     private List<Flight> flights = new ArrayList<>();
 

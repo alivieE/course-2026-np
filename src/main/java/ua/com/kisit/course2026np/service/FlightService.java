@@ -8,7 +8,18 @@ import ua.com.kisit.course2026np.repository.FlightRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервіс для роботи з рейсами.
+ *
+ * ОПТИМІЗАЦІЯ (Лаб 10):
+ *  - @Transactional(readOnly = true) на рівні класу — за замовчуванням усі методи
+ *    працюють у режимі read-only, що дає Hibernate можливість пропустити перевірку
+ *    на зміни (dirty checking) та зменшує використання CPU і пам'яті;
+ *  - Методи, що змінюють дані (create / update / delete), явно перевизначають режим
+ *    через @Transactional без параметрів.
+ */
 @Service
+@Transactional(readOnly = true)
 public class FlightService {
 
     private final FlightRepository flightRepository;
@@ -16,18 +27,23 @@ public class FlightService {
     public FlightService(FlightRepository flightRepository) {
         this.flightRepository = flightRepository;
     }
+
     public List<Flight> getAllFlights() {
         return flightRepository.findAll();
     }
+
     public Optional<Flight> getById(Long id) {
         return flightRepository.findById(id);
     }
+
     public List<Flight> getPlannedFlights() {
         return flightRepository.findByStatusOrderByDeparture("PLANNED");
     }
+
     public List<Flight> getByStatus(String status) {
         return flightRepository.findByStatus(status);
     }
+
     @Transactional
     public Flight create(Flight flight) {
         if (flightRepository.existsByFlightNumber(flight.getFlightNumber())) {
@@ -36,6 +52,7 @@ public class FlightService {
         }
         return flightRepository.save(flight);
     }
+
     @Transactional
     public Flight update(Long id, Flight updated) {
         return flightRepository.findById(id).map(f -> {
@@ -49,6 +66,7 @@ public class FlightService {
         }).orElseThrow(() ->
                 new RuntimeException("Рейс не знайдено: " + id));
     }
+
     @Transactional
     public void delete(Long id) {
         if (!flightRepository.existsById(id)) {

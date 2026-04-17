@@ -19,6 +19,16 @@
                 <li class="nav-item"><a class="nav-link" href="/flights">Розклад рейсів</a></li>
                 <li class="nav-item"><a class="nav-link active" href="/booking">Оформлення квитка</a></li>
             </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <span class="navbar-text text-white me-3">
+                        👤 ${currentUser.firstName} ${currentUser.lastName}
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-light btn-sm" href="/logout">Вийти</a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
@@ -29,19 +39,24 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-5">
                     <h1 class="card-title text-primary fw-bold mb-4">🎫 Оформлення квитка</h1>
-                    <p class="text-muted mb-4">
-                        Заповніть форму нижче, щоб забронювати місце на обраний рейс.
-                    </p>
+
+                    <div class="alert alert-success mb-4">
+                        ✅ Ви увійшли як <b>${currentUser.firstName} ${currentUser.lastName}</b>
+                        (${currentUser.email}).
+                        Форму попередньо заповнено вашими даними.
+                    </div>
 
                     <form>
                         <div class="mb-3">
                             <label for="fullName" class="form-label fw-bold">Прізвище та ім'я</label>
-                            <input type="text" class="form-control" id="fullName" placeholder="Іван Петров">
+                            <input type="text" class="form-control" id="fullName"
+                                   value="${currentUser.firstName} ${currentUser.lastName}">
                         </div>
 
                         <div class="mb-3">
                             <label for="email" class="form-label fw-bold">Електронна пошта</label>
-                            <input type="email" class="form-control" id="email" placeholder="ivan@example.com">
+                            <input type="email" class="form-control" id="email"
+                                   value="${currentUser.email}">
                         </div>
 
                         <div class="row mb-3">

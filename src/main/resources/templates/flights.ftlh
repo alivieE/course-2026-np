@@ -18,6 +18,25 @@
                 <li class="nav-item"><a class="nav-link" href="/">Головна</a></li>
                 <li class="nav-item"><a class="nav-link active" href="/flights">Розклад рейсів</a></li>
             </ul>
+            <ul class="navbar-nav">
+                <#if currentUser??>
+                    <li class="nav-item">
+                        <span class="navbar-text text-white me-3">
+                            👤 ${currentUser.firstName} ${currentUser.lastName}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light btn-sm" href="/logout">Вийти</a>
+                    </li>
+                <#else>
+                    <li class="nav-item me-2">
+                        <a class="btn btn-outline-light btn-sm" href="/login">Увійти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-light btn-sm text-primary fw-bold" href="/register">Реєстрація</a>
+                    </li>
+                </#if>
+            </ul>
         </div>
     </div>
 </nav>
@@ -27,6 +46,14 @@
         <h2 class="fw-bold">Доступні напрямки</h2>
         <span class="badge bg-secondary fs-6">Знайдено: <#if flightsCount??>${flightsCount}<#else>${flights?size}</#if> рейсів</span>
     </div>
+
+    <#if !currentUser??>
+        <div class="alert alert-info shadow-sm" role="alert">
+            💡 <b>Підказка:</b> для оформлення квитка необхідно
+            <a href="/login" class="alert-link">увійти в систему</a>
+            або <a href="/register" class="alert-link">зареєструватися</a>.
+        </div>
+    </#if>
 
     <#if flights?has_content>
         <div class="row">

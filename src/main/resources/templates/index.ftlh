@@ -18,6 +18,25 @@
                 <li class="nav-item"><a class="nav-link active" href="/">Головна</a></li>
                 <li class="nav-item"><a class="nav-link" href="/flights">Розклад рейсів</a></li>
             </ul>
+            <ul class="navbar-nav">
+                <#if currentUser??>
+                    <li class="nav-item">
+                        <span class="navbar-text text-white me-3">
+                            👤 ${currentUser.firstName} ${currentUser.lastName}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light btn-sm" href="/logout">Вийти</a>
+                    </li>
+                <#else>
+                    <li class="nav-item me-2">
+                        <a class="btn btn-outline-light btn-sm" href="/login">Увійти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-light btn-sm text-primary fw-bold" href="/register">Реєстрація</a>
+                    </li>
+                </#if>
+            </ul>
         </div>
     </div>
 </nav>
@@ -26,6 +45,11 @@
     <div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
         <div class="container-fluid py-5">
             <h1 class="display-5 fw-bold text-primary">${welcomeMessage}</h1>
+            <#if currentUser??>
+                <p class="col-md-8 fs-5 text-success fw-bold">
+                    Вітаємо, ${currentUser.firstName}! Ви успішно увійшли в систему.
+                </p>
+            </#if>
             <p class="col-md-8 fs-4 text-secondary">
                 Швидкі, безпечні та зручні перельоти до найпопулярніших міст Європи та світу.
             </p>

@@ -49,6 +49,10 @@ public class CrewMember {
     @JoinColumn(name = "crew_id", nullable = false)
     private Crew crew;
 
+    @ManyToOne
+    @JoinColumn(name = "current_flight_id")
+    private Flight currentFlight;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false,
             columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")

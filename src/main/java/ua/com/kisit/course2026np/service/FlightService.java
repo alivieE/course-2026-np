@@ -19,7 +19,7 @@ public class FlightService {
     public List<Flight> getAllFlights() {
         return flightRepository.findAll();
     }
-    public Optional<Flight> getById(Integer id) {
+    public Optional<Flight> getById(Long id) {
         return flightRepository.findById(id);
     }
     public List<Flight> getPlannedFlights() {
@@ -37,7 +37,7 @@ public class FlightService {
         return flightRepository.save(flight);
     }
     @Transactional
-    public Flight update(Integer id, Flight updated) {
+    public Flight update(Long id, Flight updated) {
         return flightRepository.findById(id).map(f -> {
             f.setFlightNumber(updated.getFlightNumber());
             f.setDepartureCity(updated.getDepartureCity());
@@ -50,7 +50,7 @@ public class FlightService {
                 new RuntimeException("Рейс не знайдено: " + id));
     }
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!flightRepository.existsById(id)) {
             throw new RuntimeException("Рейс не знайдено: " + id);
         }

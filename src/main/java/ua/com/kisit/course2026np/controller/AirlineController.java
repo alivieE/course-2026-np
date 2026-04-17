@@ -69,4 +69,12 @@ public class AirlineController {
         modelAndView.addObject("flightsCount", flightList.size());
         return modelAndView;
     }
+
+    // Сторінка оформлення квитка
+    @GetMapping("/booking")
+    public ModelAndView booking() {
+        ModelAndView modelAndView = new ModelAndView("booking");
+        modelAndView.addObject("title", "Оформлення квитка - SkyAirlines");
+        return modelAndView;
+    }
 }

@@ -35,8 +35,10 @@ public class Crew {
     private LocalDateTime createdAt;
 
     public void addMember(CrewMember member) {
-        members.add(member);
-        member.setCrew(this);
+        if (!members.contains(member)) {
+            members.add(member);
+            member.setCrew(this);
+        }
     }
 
     public void removeMember(CrewMember member) {

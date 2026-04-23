@@ -46,12 +46,22 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link active" href="/">Головна</a></li>
                 <li class="nav-item"><a class="nav-link" href="/flights">Розклад рейсів</a></li>
+                <#if currentUser?? && currentUser.role?string == "ADMIN">
+                    <li class="nav-item">
+                        <a class="nav-link text-warning fw-bold" href="/admin/flights">
+                            🛠 Адмінпанель
+                        </a>
+                    </li>
+                </#if>
             </ul>
             <ul class="navbar-nav">
                 <#if currentUser??>
                     <li class="nav-item">
                         <span class="navbar-text text-white me-3">
                             👤 ${currentUser.firstName} ${currentUser.lastName}
+                            <#if currentUser.role?string == "ADMIN">
+                                <span class="badge bg-warning text-dark">ADMIN</span>
+                            </#if>
                         </span>
                     </li>
                     <li class="nav-item">

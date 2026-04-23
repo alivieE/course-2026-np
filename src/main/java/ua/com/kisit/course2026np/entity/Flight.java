@@ -40,11 +40,9 @@ public class Flight {
     @Column(name = "arrival_city", nullable = false)
     private String arrivalCity;
 
-    @Future
     @Column(name = "departure_time", nullable = false)
     private LocalDateTime departureTime;
 
-    @Future
     @Column(name = "arrival_time", nullable = false)
     private LocalDateTime arrivalTime;
 

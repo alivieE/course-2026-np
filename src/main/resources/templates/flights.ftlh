@@ -5,8 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${title}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
+
+<#-- Спливаюче повідомлення (toast) з flash-атрибутів -->
+<#if toastMessage??>
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+    <div id="flashToast" class="toast align-items-center text-bg-${(toastType)!'primary'} border-0 shadow"
+         role="alert" data-bs-autohide="true" data-bs-delay="4000">
+        <div class="d-flex">
+            <div class="toast-body fw-bold">
+                <#if (toastType)! == "success">✅
+                <#elseif (toastType)! == "info">ℹ️
+                <#elseif (toastType)! == "danger">⚠️
+                </#if>
+                ${toastMessage}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast" aria-label="Закрити"></button>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const el = document.getElementById('flashToast');
+        if (el) new bootstrap.Toast(el).show();
+    });
+</script>
+</#if>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container">
         <a class="navbar-brand fw-bold" href="/">✈️ SkyAirlines</a>
@@ -17,12 +45,22 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Головна</a></li>
                 <li class="nav-item"><a class="nav-link active" href="/flights">Розклад рейсів</a></li>
+                <#if currentUser?? && currentUser.role?string == "ADMIN">
+                    <li class="nav-item">
+                        <a class="nav-link text-warning fw-bold" href="/admin/flights">
+                            🛠 Адмінпанель
+                        </a>
+                    </li>
+                </#if>
             </ul>
             <ul class="navbar-nav">
                 <#if currentUser??>
                     <li class="nav-item">
                         <span class="navbar-text text-white me-3">
                             👤 ${currentUser.firstName} ${currentUser.lastName}
+                            <#if currentUser.role?string == "ADMIN">
+                                <span class="badge bg-warning text-dark">ADMIN</span>
+                            </#if>
                         </span>
                     </li>
                     <li class="nav-item">
@@ -81,6 +119,8 @@
                                         <span class="badge bg-danger">Скасовано</span>
                                     <#elseif flight.status?string == "IN_PROGRESS">
                                         <span class="badge bg-info text-dark">У польоті</span>
+                                    <#elseif flight.status?string == "COMPLETED">
+                                        <span class="badge bg-secondary">Завершено</span>
                                     <#else>
                                         <span class="badge bg-warning text-dark">${flight.status}</span>
                                     </#if>
@@ -88,8 +128,8 @@
                             </ul>
                         </div>
                         <div class="card-footer bg-white border-0 text-center pb-3">
-                            <#if flight.status?string == "CANCELLED">
-                                <button class="btn btn-outline-danger w-100 fw-bold" disabled>Рейс скасовано</button>
+                            <#if flight.status?string == "CANCELLED" || flight.status?string == "COMPLETED">
+                                <button class="btn btn-outline-secondary w-100 fw-bold" disabled>Недоступно</button>
                             <#else>
                                 <a href="/booking" class="btn btn-outline-primary w-100 fw-bold">Вибрати квиток</a>
                             </#if>

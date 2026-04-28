@@ -8,16 +8,6 @@ import ua.com.kisit.course2026np.repository.FlightRepository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Сервіс для роботи з рейсами.
- *
- * ОПТИМІЗАЦІЯ (Лаб 10):
- *  - @Transactional(readOnly = true) на рівні класу — за замовчуванням усі методи
- *    працюють у режимі read-only, що дає Hibernate можливість пропустити перевірку
- *    на зміни (dirty checking) та зменшує використання CPU і пам'яті;
- *  - Методи, що змінюють дані (create / update / delete), явно перевизначають режим
- *    через @Transactional без параметрів.
- */
 @Service
 @Transactional(readOnly = true)
 public class FlightService {

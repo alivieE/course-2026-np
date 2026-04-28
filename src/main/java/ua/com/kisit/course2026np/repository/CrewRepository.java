@@ -7,8 +7,8 @@ import ua.com.kisit.course2026np.entity.Crew;
 import java.util.Optional;
 
 @Repository
-public interface CrewRepository extends JpaRepository<Crew, Integer> {
-    Optional<Crew> findByFlightId(Integer flightId);
-    boolean existsByFlightId(Integer flightId);
-    void deleteByFlightId(Integer flightId);
+public interface CrewRepository extends JpaRepository<Crew, Long> {
+    Optional<Crew> findByFlightId(Long flightId);
+    boolean existsByFlightId(Long flightId);
+    void deleteByFlightId(Long flightId);
 }

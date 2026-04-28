@@ -13,27 +13,20 @@ import java.util.Optional;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
-
-    // Пошук рейсу за унікальним номером
     Optional<Flight> findByFlightNumber(String flightNumber);
-
-    // Фільтр за статусом (індекс idx_status)
+    boolean existsByFlightNumber(String flightNumber);
     List<Flight> findByStatus(String status);
-
-    // Рейси за адміністратором (індекс idx_user_id)
-    List<Flight> findByUserId(Integer userId);
-
-    // Рейси за маршрутом
-    List<Flight> findByDepartureCityAndArrivalCity(
-            String departureCity, String arrivalCity);
-
-    // JPQL: заплановані рейси, відсортовані за часом відправлення
     @Query("SELECT f FROM Flight f WHERE f.status = :status ORDER BY f.departureTime ASC")
     List<Flight> findByStatusOrderByDeparture(@Param("status") String status);
-
-    // Рейси у діапазоні дат (індекс idx_departure_time)
+    List<Flight> findByDepartureCityAndArrivalCity(String from, String to);
     List<Flight> findByDepartureTimeBetween(LocalDateTime from, LocalDateTime to);
-
-    // Перевірка унікальності номера рейсу
-    boolean existsByFlightNumber(String flightNumber);
+    List<Flight> findByUserId(Long userId);
+    long countByStatus(FlightStatus status);
+    @Query("SELECT f FROM Flight f WHERE f.status = ua.com.kisit.course2026np.entity.FlightStatus.PLANNED " +
+            "AND f.departureTime > :now ORDER BY f.departureTime ASC")
+    List<Flight> findUpcomingFlights(@Param("now") LocalDateTime now);
+    @Query("SELECT f FROM Flight f WHERE LOWER(f.flightNumber) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(f.departureCity) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(f.arrivalCity) LIKE LOWER(CONCAT('%', :search, '%'))")
+    List<Flight> searchFlights(@Param("search") String search);
 }

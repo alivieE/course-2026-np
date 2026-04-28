@@ -10,11 +10,16 @@ import ua.com.kisit.course2026np.entity.CrewRole;
 import java.util.List;
 
 @Repository
-public interface CrewMemberRepository extends JpaRepository<CrewMember, Integer> {
-    List<CrewMember> findByCrewId(Integer crewId);
-    List<CrewMember> findByCrewIdAndRole(Integer crewId, String role);
-    long countByCrewIdAndRole(Integer crewId, String role);
-    @Query("SELECT cm FROM CrewMember cm WHERE cm.crew.flight.id = :flightId")
-    List<CrewMember> findByFlightId(@Param("flightId") Integer flightId);
-    List<CrewMember> findByLastNameContainingIgnoreCase(String lastName);
+public interface CrewMemberRepository extends JpaRepository<CrewMember, Long> {
+
+    List<CrewMember> findByCrewId(Long crewId);
+
+    List<CrewMember> findByRole(CrewRole role);
+
+    List<CrewMember> findByExperienceYearsGreaterThanEqual(Integer years);
+
+    @Query("SELECT cm FROM CrewMember cm WHERE cm.role = :role " +
+            "AND cm.experienceYears >= :minExperience")
+    List<CrewMember> findExperiencedByRole(@Param("role") CrewRole role,
+                                           @Param("minExperience") Integer minExperience);
 }

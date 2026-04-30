@@ -38,9 +38,9 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Головна</a></li>
-                <li class="nav-item"><a class="nav-link active text-warning fw-bold" href="/admin/flights">Рейси</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/flights">Рейси</a></li>
                 <li class="nav-item"><a class="nav-link" href="/admin/aircrafts">Літаки</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/passengers">Пасажири</a></li>
+                <li class="nav-item"><a class="nav-link active text-warning fw-bold" href="/admin/passengers">Пасажири</a></li>
                 <li class="nav-item"><a class="nav-link" href="/admin/tickets">Квитки</a></li>
             </ul>
             <ul class="navbar-nav">
@@ -59,46 +59,45 @@
 <div class="container mt-4 mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
         <div>
-            <h1 class="fw-bold mb-1">🛠 Керування рейсами</h1>
-            <p class="text-muted mb-0">Створюйте, редагуйте та видаляйте рейси авіакомпанії.</p>
+            <h1 class="fw-bold mb-1">👥 Керування пасажирами</h1>
+            <p class="text-muted mb-0">Створюйте, редагуйте та видаляйте записи про пасажирів.</p>
         </div>
-        <a href="/admin/flights/new" class="btn btn-primary btn-lg shadow-sm">+ Новий рейс</a>
+        <a href="/admin/passengers/new" class="btn btn-primary btn-lg shadow-sm">+ Новий пасажир</a>
     </div>
 
-    <#if flights?has_content>
+    <#if passengers?has_content>
         <div class="card shadow-sm border-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-dark">
                         <tr>
                             <th>#</th>
-                            <th>Номер</th>
-                            <th>Маршрут</th>
-                            <th>Виліт</th>
-                            <th>Приліт</th>
-                            <th>Статус</th>
+                            <th>ПІБ</th>
+                            <th>Паспорт</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
+                            <th>Стать</th>
                             <th class="text-end">Дії</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <#list flights as flight>
+                        <#list passengers as p>
                         <tr>
-                            <td>${flight.id}</td>
-                            <td><b>${flight.flightNumber}</b></td>
-                            <td>${flight.departureCity} → ${flight.arrivalCity}</td>
-                            <td>${flight.departureTime[8..9]}.${flight.departureTime[5..6]}.${flight.departureTime[0..3]} ${flight.departureTime[11..15]}</td>
-                            <td>${flight.arrivalTime[8..9]}.${flight.arrivalTime[5..6]}.${flight.arrivalTime[0..3]} ${flight.arrivalTime[11..15]}</td>
+                            <td>${p.id}</td>
+                            <td><b>${p.lastName} ${p.firstName}</b></td>
+                            <td>${p.passportNumber}</td>
+                            <td>${p.email}</td>
+                            <td>${(p.phone)!'—'}</td>
                             <td>
-                                <#if flight.status?string == "PLANNED"><span class="badge bg-success">Заплановано</span>
-                                <#elseif flight.status?string == "IN_PROGRESS"><span class="badge bg-info text-dark">У польоті</span>
-                                <#elseif flight.status?string == "COMPLETED"><span class="badge bg-secondary">Завершено</span>
-                                <#elseif flight.status?string == "CANCELLED"><span class="badge bg-danger">Скасовано</span></#if>
+                                <#if (p.gender)??>
+                                    <#if p.gender?string == "MALE">Чол.<#elseif p.gender?string == "FEMALE">Жін.<#else>Інше</#if>
+                                <#else>—</#if>
                             </td>
                             <td class="text-end">
-                                <a href="/admin/flights/${flight.id}/edit" class="btn btn-sm btn-outline-primary">✏️ Редагувати</a>
-                                <form action="/admin/flights/${flight.id}/delete" method="post" class="d-inline"
-                                      onsubmit="return confirm('Видалити рейс ${flight.flightNumber}?');">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Видалити</button>
+                                <a href="/admin/passengers/${p.id}/edit" class="btn btn-sm btn-outline-primary">✏️</a>
+                                <form action="/admin/passengers/${p.id}/delete" method="post" class="d-inline"
+                                      onsubmit="return confirm('Видалити пасажира ${p.lastName} ${p.firstName}?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">🗑</button>
                                 </form>
                             </td>
                         </tr>
@@ -107,11 +106,11 @@
                 </table>
             </div>
         </div>
-        <p class="text-muted mt-3">Усього рейсів: <b>${flights?size}</b></p>
+        <p class="text-muted mt-3">Усього пасажирів: <b>${passengers?size}</b></p>
     <#else>
         <div class="alert alert-warning text-center shadow-sm">
-            <h4 class="alert-heading fw-bold">Рейсів поки немає</h4>
-            <p>Натисніть «+ Новий рейс», щоб створити перший запис.</p>
+            <h4 class="alert-heading fw-bold">Пасажирів поки немає</h4>
+            <p>Натисніть «+ Новий пасажир», щоб створити перший запис.</p>
         </div>
     </#if>
 </div>

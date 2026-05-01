@@ -28,20 +28,18 @@ public class PassengerService {
 
     @Transactional
     public Passenger create(Passenger passenger) {
-        if (passengerRepository.existsByPassportNumber(passenger.getPassportNumber())) {
-            throw new IllegalArgumentException(
-                    "Пасажир з паспортом " + passenger.getPassportNumber() + " вже існує");
-        }
-        if (passengerRepository.existsByEmail(passenger.getEmail())) {
-            throw new IllegalArgumentException(
-                    "Пасажир з email " + passenger.getEmail() + " вже існує");
-        }
+        validateUniqueness(passenger, null);
         return passengerRepository.save(passenger);
     }
 
     @Transactional
     public Passenger update(Long id, Passenger updated) {
         return passengerRepository.findById(id).map(p -> {
+            // Якщо паспорт або email змінилися — перевіряємо унікальність
+            if (!p.getPassportNumber().equals(updated.getPassportNumber()) ||
+                    !p.getEmail().equals(updated.getEmail())) {
+                validateUniqueness(updated, id);
+            }
             p.setFirstName(updated.getFirstName());
             p.setLastName(updated.getLastName());
             p.setPassportNumber(updated.getPassportNumber());
@@ -60,5 +58,30 @@ public class PassengerService {
             throw new RuntimeException("Пасажира не знайдено: " + id);
         }
         passengerRepository.deleteById(id);
+    }
+
+    public List<Passenger> searchByLastName(String lastName) {
+        if (lastName == null || lastName.isBlank()) {
+            return getAll();
+        }
+        return passengerRepository.findByLastNameContainingIgnoreCase(lastName.trim());
+    }
+
+    public Optional<Passenger> findByPassport(String passportNumber) {
+        return passengerRepository.findByPassportNumber(passportNumber);
+    }
+
+    private void validateUniqueness(Passenger passenger, Long currentId) {
+        Optional<Passenger> byPassport = passengerRepository.findByPassportNumber(
+                passenger.getPassportNumber());
+        if (byPassport.isPresent() && !byPassport.get().getId().equals(currentId)) {
+            throw new IllegalArgumentException(
+                    "Пасажир з паспортом " + passenger.getPassportNumber() + " вже існує");
+        }
+        Optional<Passenger> byEmail = passengerRepository.findByEmail(passenger.getEmail());
+        if (byEmail.isPresent() && !byEmail.get().getId().equals(currentId)) {
+            throw new IllegalArgumentException(
+                    "Пасажир з email " + passenger.getEmail() + " вже існує");
+        }
     }
 }

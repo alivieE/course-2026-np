@@ -8,9 +8,6 @@ import ua.com.kisit.course2026np.repository.AircraftRepository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Сервіс для CRUD-операцій над літаками.
- */
 @Service
 @Transactional(readOnly = true)
 public class AircraftService {
@@ -27,6 +24,10 @@ public class AircraftService {
 
     public Optional<Aircraft> getById(Long id) {
         return aircraftRepository.findById(id);
+    }
+
+    public List<Aircraft> getActiveAircrafts() {
+        return aircraftRepository.findByStatus(Aircraft.AircraftStatus.ACTIVE);
     }
 
     @Transactional
@@ -59,5 +60,43 @@ public class AircraftService {
             throw new RuntimeException("Літак не знайдено: " + id);
         }
         aircraftRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Aircraft sendToMaintenance(Long aircraftId) {
+        Aircraft aircraft = aircraftRepository.findById(aircraftId)
+                .orElseThrow(() -> new RuntimeException("Літак не знайдено: " + aircraftId));
+        if (aircraft.getStatus() == Aircraft.AircraftStatus.RETIRED) {
+            throw new IllegalStateException(
+                    "Не можна відправити списаний літак на обслуговування");
+        }
+        aircraft.setStatus(Aircraft.AircraftStatus.MAINTENANCE);
+        return aircraftRepository.save(aircraft);
+    }
+
+    @Transactional
+    public Aircraft activate(Long aircraftId) {
+        Aircraft aircraft = aircraftRepository.findById(aircraftId)
+                .orElseThrow(() -> new RuntimeException("Літак не знайдено: " + aircraftId));
+        if (aircraft.getStatus() == Aircraft.AircraftStatus.RETIRED) {
+            throw new IllegalStateException(
+                    "Не можна активувати списаний літак");
+        }
+        aircraft.setStatus(Aircraft.AircraftStatus.ACTIVE);
+        return aircraftRepository.save(aircraft);
+    }
+
+    @Transactional
+    public Aircraft retire(Long aircraftId) {
+        Aircraft aircraft = aircraftRepository.findById(aircraftId)
+                .orElseThrow(() -> new RuntimeException("Літак не знайдено: " + aircraftId));
+        aircraft.setStatus(Aircraft.AircraftStatus.RETIRED);
+        return aircraftRepository.save(aircraft);
+    }
+
+    public List<Aircraft> getAircraftsNeedingMaintenance() {
+        return aircraftRepository.findAll().stream()
+                .filter(Aircraft::needsMaintenance)
+                .toList();
     }
 }

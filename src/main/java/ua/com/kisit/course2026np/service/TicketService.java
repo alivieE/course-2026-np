@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.kisit.course2026np.entity.Ticket;
 import ua.com.kisit.course2026np.repository.TicketRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,14 @@ public class TicketService {
 
     public Optional<Ticket> getById(Long id) {
         return ticketRepository.findById(id);
+    }
+
+    public List<Ticket> getByPassenger(Long passengerId) {
+        return ticketRepository.findByPassengerId(passengerId);
+    }
+
+    public List<Ticket> getByFlight(Long flightId) {
+        return ticketRepository.findByFlightId(flightId);
     }
 
     @Transactional
@@ -56,5 +65,45 @@ public class TicketService {
             throw new RuntimeException("Квиток не знайдено: " + id);
         }
         ticketRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Ticket confirmTicket(Long ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Квиток не знайдено: " + ticketId));
+        if (ticket.getStatus() != Ticket.TicketStatus.RESERVED) {
+            throw new IllegalStateException(
+                    "Підтвердити можна лише заброньований квиток. Поточний статус: " + ticket.getStatus());
+        }
+        ticket.setStatus(Ticket.TicketStatus.CONFIRMED);
+        return ticketRepository.save(ticket);
+    }
+
+    @Transactional
+    public Ticket cancelTicket(Long ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Квиток не знайдено: " + ticketId));
+        ticket.cancel();
+        return ticketRepository.save(ticket);
+    }
+
+    @Transactional
+    public Ticket markAsUsed(Long ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Квиток не знайдено: " + ticketId));
+        if (ticket.getStatus() != Ticket.TicketStatus.CONFIRMED) {
+            throw new IllegalStateException(
+                    "Позначити як використаний можна лише підтверджений квиток. Поточний статус: " + ticket.getStatus());
+        }
+        ticket.setStatus(Ticket.TicketStatus.USED);
+        return ticketRepository.save(ticket);
+    }
+
+    public BigDecimal calculateRevenueByFlight(Long flightId) {
+        return ticketRepository.calculateRevenueByFlight(flightId);
+    }
+
+    public long countSoldTicketsByFlight(Long flightId) {
+        return ticketRepository.countByFlightIdAndStatus(flightId, Ticket.TicketStatus.CONFIRMED);
     }
 }

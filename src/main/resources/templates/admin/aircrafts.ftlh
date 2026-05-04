@@ -62,10 +62,16 @@
 <div class="container mt-4 mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
         <div>
-            <h1 class="fw-bold mb-1">🛩 Керування літаками</h1>
+            <h1 class="fw-bold mb-1">🛩 ${(filterTitle)!'Керування літаками'}</h1>
             <p class="text-muted mb-0">Створюйте, редагуйте та видаляйте літаки авіакомпанії.</p>
         </div>
         <a href="/admin/aircrafts/new" class="btn btn-primary btn-lg shadow-sm">+ Новий літак</a>
+    </div>
+
+    <#-- Швидкі фільтри -->
+    <div class="mb-4 d-flex gap-2">
+        <a href="/admin/aircrafts" class="btn btn-outline-primary btn-sm">Усі літаки</a>
+        <a href="/admin/aircrafts/maintenance-needed" class="btn btn-outline-warning btn-sm">🔧 Потребують ТО</a>
     </div>
 
     <#if aircrafts?has_content>
@@ -105,10 +111,29 @@
                                 </#if>
                             </td>
                             <td class="text-end">
-                                <a href="/admin/aircrafts/${a.id}/edit" class="btn btn-sm btn-outline-primary">✏️</a>
+                                <#-- Бізнес-операції залежно від поточного статусу літака -->
+                                <#if a.status?string != "RETIRED" && a.status?string != "MAINTENANCE">
+                                    <form action="/admin/aircrafts/${a.id}/maintenance" method="post" class="d-inline"
+                                          onsubmit="return confirm('Відправити літак ${a.registrationNumber} на ТО?');">
+                                        <button type="submit" class="btn btn-sm btn-warning" title="На ТО">🔧</button>
+                                    </form>
+                                </#if>
+                                <#if a.status?string != "RETIRED" && a.status?string != "ACTIVE">
+                                    <form action="/admin/aircrafts/${a.id}/activate" method="post" class="d-inline"
+                                          onsubmit="return confirm('Повернути літак ${a.registrationNumber} в експлуатацію?');">
+                                        <button type="submit" class="btn btn-sm btn-success" title="Активувати">▶</button>
+                                    </form>
+                                </#if>
+                                <#if a.status?string != "RETIRED">
+                                    <form action="/admin/aircrafts/${a.id}/retire" method="post" class="d-inline"
+                                          onsubmit="return confirm('Списати літак ${a.registrationNumber}?');">
+                                        <button type="submit" class="btn btn-sm btn-secondary" title="Списати">⏏</button>
+                                    </form>
+                                </#if>
+                                <a href="/admin/aircrafts/${a.id}/edit" class="btn btn-sm btn-outline-primary" title="Редагувати">✏️</a>
                                 <form action="/admin/aircrafts/${a.id}/delete" method="post" class="d-inline"
                                       onsubmit="return confirm('Видалити літак ${a.registrationNumber}?');">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">🗑</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Видалити">🗑</button>
                                 </form>
                             </td>
                         </tr>

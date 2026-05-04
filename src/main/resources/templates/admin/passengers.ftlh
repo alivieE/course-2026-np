@@ -65,6 +65,22 @@
         <a href="/admin/passengers/new" class="btn btn-primary btn-lg shadow-sm">+ Новий пасажир</a>
     </div>
 
+    <#-- Пошук пасажирів за прізвищем -->
+    <form action="/admin/passengers" method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control"
+                   placeholder="🔍 Пошук за прізвищем..."
+                   value="${(searchQuery)!''}">
+            <button class="btn btn-outline-primary" type="submit">Знайти</button>
+            <#if searchQuery??>
+                <a href="/admin/passengers" class="btn btn-outline-secondary">Скинути</a>
+            </#if>
+        </div>
+        <#if searchQuery??>
+            <small class="text-muted mt-1 d-block">Результати пошуку за: <b>${searchQuery}</b></small>
+        </#if>
+    </form>
+
     <#if passengers?has_content>
         <div class="card shadow-sm border-0">
             <div class="table-responsive">

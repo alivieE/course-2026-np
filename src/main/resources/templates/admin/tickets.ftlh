@@ -103,10 +103,29 @@
                                 <#elseif t.status?string == "USED"><span class="badge bg-secondary">Використано</span></#if>
                             </td>
                             <td class="text-end">
-                                <a href="/admin/tickets/${t.id}/edit" class="btn btn-sm btn-outline-primary">✏️</a>
+                                <#-- Бізнес-операції залежно від поточного статусу квитка -->
+                                <#if t.status?string == "RESERVED">
+                                    <form action="/admin/tickets/${t.id}/confirm" method="post" class="d-inline"
+                                          onsubmit="return confirm('Підтвердити квиток ${t.ticketNumber}?');">
+                                        <button type="submit" class="btn btn-sm btn-success" title="Підтвердити">✓</button>
+                                    </form>
+                                </#if>
+                                <#if t.status?string == "CONFIRMED">
+                                    <form action="/admin/tickets/${t.id}/use" method="post" class="d-inline"
+                                          onsubmit="return confirm('Позначити квиток ${t.ticketNumber} як використаний?');">
+                                        <button type="submit" class="btn btn-sm btn-secondary" title="Використати">🛫</button>
+                                    </form>
+                                </#if>
+                                <#if t.status?string == "RESERVED" || t.status?string == "CONFIRMED">
+                                    <form action="/admin/tickets/${t.id}/cancel" method="post" class="d-inline"
+                                          onsubmit="return confirm('Скасувати квиток ${t.ticketNumber}?');">
+                                        <button type="submit" class="btn btn-sm btn-warning" title="Скасувати">⊘</button>
+                                    </form>
+                                </#if>
+                                <a href="/admin/tickets/${t.id}/edit" class="btn btn-sm btn-outline-primary" title="Редагувати">✏️</a>
                                 <form action="/admin/tickets/${t.id}/delete" method="post" class="d-inline"
                                       onsubmit="return confirm('Видалити квиток ${t.ticketNumber}?');">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">🗑</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Видалити">🗑</button>
                                 </form>
                             </td>
                         </tr>

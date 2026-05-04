@@ -1,13 +1,12 @@
 package ua.com.kisit.course2026np.controller;
 
-import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.com.kisit.course2026np.entity.Aircraft;
-import ua.com.kisit.course2026np.entity.User;
-import ua.com.kisit.course2026np.entity.UserRole;
+import ua.com.kisit.course2026np.security.SecurityUserDetails;
 import ua.com.kisit.course2026np.service.AircraftService;
 
 import java.util.Optional;
@@ -22,33 +21,20 @@ public class AircraftManagerController {
         this.aircraftService = aircraftService;
     }
 
-    private User requireAdmin(HttpSession session) {
-        Object attr = session.getAttribute(AuthController.SESSION_USER_ATTR);
-        if (!(attr instanceof User)) return null;
-        User user = (User) attr;
-        return user.getRole() == UserRole.ADMIN ? user : null;
-    }
-
     @GetMapping
-    public ModelAndView listAircrafts(HttpSession session) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView listAircrafts(@AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView mv = new ModelAndView("admin/aircrafts");
         mv.addObject("title", "Адмінпанель — Літаки");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
         mv.addObject("aircrafts", aircraftService.getAll());
         return mv;
     }
 
     @GetMapping("/new")
-    public ModelAndView newAircraftForm(HttpSession session) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView newAircraftForm(@AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView mv = new ModelAndView("admin/aircraft-form");
         mv.addObject("title", "Створення літака — Адмінпанель");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
         mv.addObject("aircraft", new Aircraft());
         mv.addObject("isNew", true);
         mv.addObject("statuses", Aircraft.AircraftStatus.values());
@@ -63,9 +49,7 @@ public class AircraftManagerController {
                                        @RequestParam Integer totalSeats,
                                        @RequestParam(required = false) Integer maxRangeKm,
                                        @RequestParam Aircraft.AircraftStatus status,
-                                       HttpSession session,
                                        RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
         try {
             Aircraft aircraft = Aircraft.builder()
                     .registrationNumber(registrationNumber)
@@ -88,10 +72,9 @@ public class AircraftManagerController {
     }
 
     @GetMapping("/{id}/edit")
-    public ModelAndView editAircraftForm(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView editAircraftForm(@PathVariable Long id,
+                                         @AuthenticationPrincipal SecurityUserDetails principal,
+                                         RedirectAttributes ra) {
         Optional<Aircraft> aOpt = aircraftService.getById(id);
         if (aOpt.isEmpty()) {
             ra.addFlashAttribute("toastType", "danger");
@@ -100,7 +83,7 @@ public class AircraftManagerController {
         }
         ModelAndView mv = new ModelAndView("admin/aircraft-form");
         mv.addObject("title", "Редагування літака — Адмінпанель");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
         mv.addObject("aircraft", aOpt.get());
         mv.addObject("isNew", false);
         mv.addObject("statuses", Aircraft.AircraftStatus.values());
@@ -116,9 +99,7 @@ public class AircraftManagerController {
                                        @RequestParam Integer totalSeats,
                                        @RequestParam(required = false) Integer maxRangeKm,
                                        @RequestParam Aircraft.AircraftStatus status,
-                                       HttpSession session,
                                        RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
         try {
             Aircraft updated = Aircraft.builder()
                     .registrationNumber(registrationNumber)
@@ -140,8 +121,7 @@ public class AircraftManagerController {
     }
 
     @PostMapping("/{id}/delete")
-    public ModelAndView deleteAircraft(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
+    public ModelAndView deleteAircraft(@PathVariable Long id, RedirectAttributes ra) {
         try {
             aircraftService.delete(id);
             ra.addFlashAttribute("toastType", "info");
@@ -153,11 +133,8 @@ public class AircraftManagerController {
         return new ModelAndView("redirect:/admin/aircrafts");
     }
 
-    // ==================== Бізнес-операції ====================
-
     @PostMapping("/{id}/maintenance")
-    public ModelAndView sendToMaintenance(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
+    public ModelAndView sendToMaintenance(@PathVariable Long id, RedirectAttributes ra) {
         try {
             Aircraft aircraft = aircraftService.sendToMaintenance(id);
             ra.addFlashAttribute("toastType", "info");
@@ -171,8 +148,7 @@ public class AircraftManagerController {
     }
 
     @PostMapping("/{id}/activate")
-    public ModelAndView activate(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
+    public ModelAndView activate(@PathVariable Long id, RedirectAttributes ra) {
         try {
             Aircraft aircraft = aircraftService.activate(id);
             ra.addFlashAttribute("toastType", "success");
@@ -186,8 +162,7 @@ public class AircraftManagerController {
     }
 
     @PostMapping("/{id}/retire")
-    public ModelAndView retire(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
+    public ModelAndView retire(@PathVariable Long id, RedirectAttributes ra) {
         try {
             Aircraft aircraft = aircraftService.retire(id);
             ra.addFlashAttribute("toastType", "info");
@@ -201,13 +176,10 @@ public class AircraftManagerController {
     }
 
     @GetMapping("/maintenance-needed")
-    public ModelAndView listMaintenanceNeeded(HttpSession session) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView listMaintenanceNeeded(@AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView mv = new ModelAndView("admin/aircrafts");
         mv.addObject("title", "Літаки, що потребують ТО");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
         mv.addObject("aircrafts", aircraftService.getAircraftsNeedingMaintenance());
         mv.addObject("filterTitle", "Літаки, що потребують технічного обслуговування");
         return mv;

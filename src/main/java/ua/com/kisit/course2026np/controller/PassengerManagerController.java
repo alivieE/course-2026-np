@@ -1,13 +1,12 @@
 package ua.com.kisit.course2026np.controller;
 
-import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.com.kisit.course2026np.entity.Passenger;
-import ua.com.kisit.course2026np.entity.User;
-import ua.com.kisit.course2026np.entity.UserRole;
+import ua.com.kisit.course2026np.security.SecurityUserDetails;
 import ua.com.kisit.course2026np.service.PassengerService;
 
 import java.time.LocalDate;
@@ -23,22 +22,12 @@ public class PassengerManagerController {
         this.passengerService = passengerService;
     }
 
-    private User requireAdmin(HttpSession session) {
-        Object attr = session.getAttribute(AuthController.SESSION_USER_ATTR);
-        if (!(attr instanceof User)) return null;
-        User user = (User) attr;
-        return user.getRole() == UserRole.ADMIN ? user : null;
-    }
-
     @GetMapping
     public ModelAndView listPassengers(@RequestParam(required = false) String search,
-                                       HttpSession session) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+                                       @AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView mv = new ModelAndView("admin/passengers");
         mv.addObject("title", "Адмінпанель — Пасажири");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
 
         if (search != null && !search.isBlank()) {
             mv.addObject("passengers", passengerService.searchByLastName(search));
@@ -50,13 +39,10 @@ public class PassengerManagerController {
     }
 
     @GetMapping("/new")
-    public ModelAndView newPassengerForm(HttpSession session) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView newPassengerForm(@AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView mv = new ModelAndView("admin/passenger-form");
         mv.addObject("title", "Створення пасажира — Адмінпанель");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
         mv.addObject("passenger", new Passenger());
         mv.addObject("isNew", true);
         mv.addObject("genders", Passenger.Gender.values());
@@ -71,9 +57,7 @@ public class PassengerManagerController {
                                         @RequestParam(required = false) String phone,
                                         @RequestParam(required = false) String dateOfBirth,
                                         @RequestParam(required = false) Passenger.Gender gender,
-                                        HttpSession session,
                                         RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
         try {
             Passenger passenger = Passenger.builder()
                     .firstName(firstName)
@@ -98,10 +82,9 @@ public class PassengerManagerController {
     }
 
     @GetMapping("/{id}/edit")
-    public ModelAndView editPassengerForm(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView editPassengerForm(@PathVariable Long id,
+                                          @AuthenticationPrincipal SecurityUserDetails principal,
+                                          RedirectAttributes ra) {
         Optional<Passenger> pOpt = passengerService.getById(id);
         if (pOpt.isEmpty()) {
             ra.addFlashAttribute("toastType", "danger");
@@ -110,7 +93,7 @@ public class PassengerManagerController {
         }
         ModelAndView mv = new ModelAndView("admin/passenger-form");
         mv.addObject("title", "Редагування пасажира — Адмінпанель");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
         mv.addObject("passenger", pOpt.get());
         mv.addObject("isNew", false);
         mv.addObject("genders", Passenger.Gender.values());
@@ -126,9 +109,7 @@ public class PassengerManagerController {
                                         @RequestParam(required = false) String phone,
                                         @RequestParam(required = false) String dateOfBirth,
                                         @RequestParam(required = false) Passenger.Gender gender,
-                                        HttpSession session,
                                         RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
         try {
             Passenger updated = Passenger.builder()
                     .firstName(firstName)
@@ -151,8 +132,7 @@ public class PassengerManagerController {
     }
 
     @PostMapping("/{id}/delete")
-    public ModelAndView deletePassenger(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
+    public ModelAndView deletePassenger(@PathVariable Long id, RedirectAttributes ra) {
         try {
             passengerService.delete(id);
             ra.addFlashAttribute("toastType", "info");

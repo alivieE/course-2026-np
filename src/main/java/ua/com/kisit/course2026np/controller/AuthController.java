@@ -1,7 +1,9 @@
 package ua.com.kisit.course2026np.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,18 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.com.kisit.course2026np.entity.User;
+import ua.com.kisit.course2026np.security.SecurityUserDetails;
 import ua.com.kisit.course2026np.service.UserService;
 
-import java.util.Optional;
-
-/**
- * Контролер автентифікації користувачів через HttpSession.
- *
- * Після успішного входу об'єкт User зберігається у сесії під атрибутом "loginUser".
- * Також для показу спливаючих повідомлень (toast) використовуються flash-атрибути
- * RedirectAttributes: toastMessage і toastType ("success" / "info" / "danger"),
- * які переживають redirect і доступні шаблону лише один раз.
- */
 @Controller
 public class AuthController {
 
@@ -32,44 +25,19 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // ----- LOGIN -----
-
     @GetMapping("/login")
-    public ModelAndView loginPage() {
+    public ModelAndView loginPage(@RequestParam(value = "error", required = false) String error,
+                                  @RequestParam(value = "logout", required = false) String logout) {
         ModelAndView mv = new ModelAndView("login");
         mv.addObject("title", "Вхід - SkyAirlines");
+        if (error != null) {
+            mv.addObject("error", "Невірний email або пароль. Спробуйте ще раз.");
+        }
+        if (logout != null) {
+            mv.addObject("info", "Ви успішно вийшли з системи.");
+        }
         return mv;
     }
-
-    @PostMapping("/login")
-    public ModelAndView loginSubmit(@RequestParam("email") String email,
-                                    @RequestParam("password") String password,
-                                    HttpServletRequest request,
-                                    RedirectAttributes redirectAttrs) {
-        Optional<User> userOpt = userService.login(email, password);
-
-        if (userOpt.isEmpty()) {
-            ModelAndView mv = new ModelAndView("login");
-            mv.addObject("title", "Вхід - SkyAirlines");
-            mv.addObject("error", "Невірний email або пароль. Спробуйте ще раз.");
-            mv.addObject("email", email);
-            return mv;
-        }
-
-        HttpSession session = request.getSession();
-        if (session.getAttribute(SESSION_USER_ATTR) == null) {
-            session.setAttribute(SESSION_USER_ATTR, userOpt.get());
-        }
-
-        // Flash-повідомлення після redirect
-        redirectAttrs.addFlashAttribute("toastType", "success");
-        redirectAttrs.addFlashAttribute("toastMessage",
-                "Вітаємо, " + userOpt.get().getFirstName() + "! Ви успішно увійшли в систему.");
-
-        return new ModelAndView("redirect:/");
-    }
-
-    // ----- REGISTER -----
 
     @GetMapping("/register")
     public ModelAndView registerPage() {
@@ -87,7 +55,14 @@ public class AuthController {
                                        RedirectAttributes redirectAttrs) {
         try {
             User user = userService.register(firstName, lastName, email, password);
-            request.getSession().setAttribute(SESSION_USER_ATTR, user);
+
+
+            SecurityUserDetails principal = new SecurityUserDetails(user);
+            Authentication auth = new UsernamePasswordAuthenticationToken(
+                    principal, null, principal.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            request.getSession().setAttribute(
+                    "SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
             redirectAttrs.addFlashAttribute("toastType", "success");
             redirectAttrs.addFlashAttribute("toastMessage",
@@ -103,24 +78,5 @@ public class AuthController {
             mv.addObject("email", email);
             return mv;
         }
-    }
-
-    // ----- LOGOUT -----
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session, RedirectAttributes redirectAttrs) {
-        // Забираємо ім'я ДО invalidate (після — сесія недоступна)
-        Object attr = session.getAttribute(SESSION_USER_ATTR);
-        String firstName = attr instanceof User ? ((User) attr).getFirstName() : null;
-
-        session.invalidate();
-
-        redirectAttrs.addFlashAttribute("toastType", "info");
-        redirectAttrs.addFlashAttribute("toastMessage",
-                firstName != null
-                        ? "До побачення, " + firstName + "! Ви вийшли з системи."
-                        : "Ви вийшли з системи.");
-
-        return "redirect:/";
     }
 }

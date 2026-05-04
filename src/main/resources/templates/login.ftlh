@@ -29,6 +29,9 @@
                     <#if error??>
                         <div class="alert alert-danger">${error}</div>
                     </#if>
+                    <#if info??>
+                        <div class="alert alert-info">${info}</div>
+                    </#if>
 
                     <form action="/login" method="post">
                         <div class="mb-3">

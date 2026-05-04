@@ -1,11 +1,12 @@
 package ua.com.kisit.course2026np.controller;
 
-import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.kisit.course2026np.entity.Flight;
 import ua.com.kisit.course2026np.entity.User;
+import ua.com.kisit.course2026np.security.SecurityUserDetails;
 import ua.com.kisit.course2026np.service.FlightService;
 
 import java.util.List;
@@ -19,50 +20,35 @@ public class AirlineController {
         this.flightService = flightService;
     }
 
-    /**
-     * Повертає User з сесії або null.
-     */
-    private User currentUser(HttpSession session) {
-        Object attr = session.getAttribute(AuthController.SESSION_USER_ATTR);
-        return attr instanceof User ? (User) attr : null;
+    private User extractUser(SecurityUserDetails principal) {
+        return principal != null ? principal.getUser() : null;
     }
 
     @GetMapping("/")
-    public ModelAndView home(HttpSession session) {
+    public ModelAndView home(@AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("title", "Головна - SkyAirlines");
         modelAndView.addObject("welcomeMessage", "Ласкаво просимо до SkyAirlines!");
-        modelAndView.addObject("currentUser", currentUser(session));
+        modelAndView.addObject("currentUser", extractUser(principal));
         return modelAndView;
     }
 
-    /**
-     * Розклад рейсів для клієнта — дані беруться з БД через FlightService.
-     */
     @GetMapping("/flights")
-    public ModelAndView flights(HttpSession session) {
+    public ModelAndView flights(@AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView modelAndView = new ModelAndView("flights");
         List<Flight> flightList = flightService.getAllFlights();
         modelAndView.addObject("title", "Розклад рейсів - SkyAirlines");
         modelAndView.addObject("flights", flightList);
         modelAndView.addObject("flightsCount", flightList.size());
-        modelAndView.addObject("currentUser", currentUser(session));
+        modelAndView.addObject("currentUser", extractUser(principal));
         return modelAndView;
     }
 
-    /**
-     * Сторінка оформлення квитка — ЗАХИЩЕНА.
-     * Якщо в сесії немає loginUser — перенаправлення на /login.
-     */
     @GetMapping("/booking")
-    public ModelAndView booking(HttpSession session) {
-        User user = currentUser(session);
-        if (user == null) {
-            return new ModelAndView("redirect:/login");
-        }
+    public ModelAndView booking(@AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView modelAndView = new ModelAndView("booking");
         modelAndView.addObject("title", "Оформлення квитка - SkyAirlines");
-        modelAndView.addObject("currentUser", user);
+        modelAndView.addObject("currentUser", principal.getUser());
         return modelAndView;
     }
 }

@@ -1,6 +1,6 @@
 package ua.com.kisit.course2026np.controller;
 
-import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -8,8 +8,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.com.kisit.course2026np.entity.Flight;
 import ua.com.kisit.course2026np.entity.Passenger;
 import ua.com.kisit.course2026np.entity.Ticket;
-import ua.com.kisit.course2026np.entity.User;
-import ua.com.kisit.course2026np.entity.UserRole;
+import ua.com.kisit.course2026np.security.SecurityUserDetails;
 import ua.com.kisit.course2026np.service.FlightService;
 import ua.com.kisit.course2026np.service.PassengerService;
 import ua.com.kisit.course2026np.service.TicketService;
@@ -33,33 +32,20 @@ public class TicketManagerController {
         this.flightService = flightService;
     }
 
-    private User requireAdmin(HttpSession session) {
-        Object attr = session.getAttribute(AuthController.SESSION_USER_ATTR);
-        if (!(attr instanceof User)) return null;
-        User user = (User) attr;
-        return user.getRole() == UserRole.ADMIN ? user : null;
-    }
-
     @GetMapping
-    public ModelAndView listTickets(HttpSession session) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView listTickets(@AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView mv = new ModelAndView("admin/tickets");
         mv.addObject("title", "Адмінпанель — Квитки");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
         mv.addObject("tickets", ticketService.getAll());
         return mv;
     }
 
     @GetMapping("/new")
-    public ModelAndView newTicketForm(HttpSession session) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView newTicketForm(@AuthenticationPrincipal SecurityUserDetails principal) {
         ModelAndView mv = new ModelAndView("admin/ticket-form");
         mv.addObject("title", "Створення квитка — Адмінпанель");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
         mv.addObject("ticket", new Ticket());
         mv.addObject("isNew", true);
         mv.addObject("statuses", Ticket.TicketStatus.values());
@@ -77,9 +63,7 @@ public class TicketManagerController {
                                      @RequestParam Ticket.TicketStatus status,
                                      @RequestParam Long passengerId,
                                      @RequestParam Long flightId,
-                                     HttpSession session,
                                      RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
         try {
             Passenger passenger = passengerService.getById(passengerId)
                     .orElseThrow(() -> new IllegalArgumentException("Пасажира не знайдено"));
@@ -107,10 +91,9 @@ public class TicketManagerController {
     }
 
     @GetMapping("/{id}/edit")
-    public ModelAndView editTicketForm(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView editTicketForm(@PathVariable Long id,
+                                       @AuthenticationPrincipal SecurityUserDetails principal,
+                                       RedirectAttributes ra) {
         Optional<Ticket> tOpt = ticketService.getById(id);
         if (tOpt.isEmpty()) {
             ra.addFlashAttribute("toastType", "danger");
@@ -119,7 +102,7 @@ public class TicketManagerController {
         }
         ModelAndView mv = new ModelAndView("admin/ticket-form");
         mv.addObject("title", "Редагування квитка — Адмінпанель");
-        mv.addObject("currentUser", admin);
+        mv.addObject("currentUser", principal.getUser());
         mv.addObject("ticket", tOpt.get());
         mv.addObject("isNew", false);
         mv.addObject("statuses", Ticket.TicketStatus.values());
@@ -138,9 +121,7 @@ public class TicketManagerController {
                                      @RequestParam Ticket.TicketStatus status,
                                      @RequestParam Long passengerId,
                                      @RequestParam Long flightId,
-                                     HttpSession session,
                                      RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
         try {
             Passenger passenger = passengerService.getById(passengerId)
                     .orElseThrow(() -> new IllegalArgumentException("Пасажира не знайдено"));
@@ -167,8 +148,7 @@ public class TicketManagerController {
     }
 
     @PostMapping("/{id}/delete")
-    public ModelAndView deleteTicket(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
+    public ModelAndView deleteTicket(@PathVariable Long id, RedirectAttributes ra) {
         try {
             ticketService.delete(id);
             ra.addFlashAttribute("toastType", "info");
@@ -180,11 +160,8 @@ public class TicketManagerController {
         return new ModelAndView("redirect:/admin/tickets");
     }
 
-    // ==================== Бізнес-операції ====================
-
     @PostMapping("/{id}/confirm")
-    public ModelAndView confirmTicket(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
+    public ModelAndView confirmTicket(@PathVariable Long id, RedirectAttributes ra) {
         try {
             Ticket ticket = ticketService.confirmTicket(id);
             ra.addFlashAttribute("toastType", "success");
@@ -198,8 +175,7 @@ public class TicketManagerController {
     }
 
     @PostMapping("/{id}/cancel")
-    public ModelAndView cancelTicket(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
+    public ModelAndView cancelTicket(@PathVariable Long id, RedirectAttributes ra) {
         try {
             Ticket ticket = ticketService.cancelTicket(id);
             ra.addFlashAttribute("toastType", "info");
@@ -213,8 +189,7 @@ public class TicketManagerController {
     }
 
     @PostMapping("/{id}/use")
-    public ModelAndView markAsUsed(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
-        if (requireAdmin(session) == null) return new ModelAndView("redirect:/login");
+    public ModelAndView markAsUsed(@PathVariable Long id, RedirectAttributes ra) {
         try {
             Ticket ticket = ticketService.markAsUsed(id);
             ra.addFlashAttribute("toastType", "info");
@@ -228,11 +203,7 @@ public class TicketManagerController {
     }
 
     @GetMapping("/revenue/{flightId}")
-    public ModelAndView showFlightRevenue(@PathVariable Long flightId,
-                                          HttpSession session, RedirectAttributes ra) {
-        User admin = requireAdmin(session);
-        if (admin == null) return new ModelAndView("redirect:/login");
-
+    public ModelAndView showFlightRevenue(@PathVariable Long flightId, RedirectAttributes ra) {
         Optional<Flight> flightOpt = flightService.getById(flightId);
         if (flightOpt.isEmpty()) {
             ra.addFlashAttribute("toastType", "danger");

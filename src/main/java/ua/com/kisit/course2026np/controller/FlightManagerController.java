@@ -1,5 +1,7 @@
 package ua.com.kisit.course2026np.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,9 @@ import java.util.Optional;
 @RequestMapping("/admin/flights")
 public class FlightManagerController {
 
+    private static final Logger log = LoggerFactory.getLogger(FlightManagerController.class);
+    private static final Logger auditLog = LoggerFactory.getLogger("AUDIT");
+
     private static final DateTimeFormatter INPUT_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
@@ -30,6 +35,7 @@ public class FlightManagerController {
 
     @GetMapping
     public ModelAndView listFlights(@AuthenticationPrincipal SecurityUserDetails principal) {
+        log.debug("Перегляд списку рейсів користувачем {}", principal.getUsername());
         ModelAndView mv = new ModelAndView("admin/flights");
         mv.addObject("title", "Адмінпанель — Рейси");
         mv.addObject("currentUser", principal.getUser());
@@ -69,12 +75,15 @@ public class FlightManagerController {
                     .user(admin)
                     .build();
 
-            flightService.create(flight);
+            Flight created = flightService.create(flight);
+            auditLog.info("FLIGHT_CREATE actor={} flightId={} flightNumber={} from={} to={}",
+                    principal.getUsername(), created.getId(), flightNumber, departureCity, arrivalCity);
 
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage", "Рейс " + flightNumber + " успішно створено.");
             return new ModelAndView("redirect:/admin/flights");
         } catch (IllegalArgumentException ex) {
+            log.warn("Не вдалось створити рейс {}: {}", flightNumber, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", ex.getMessage());
             return new ModelAndView("redirect:/admin/flights/new");
@@ -108,6 +117,7 @@ public class FlightManagerController {
                                      @RequestParam String departureTime,
                                      @RequestParam String arrivalTime,
                                      @RequestParam FlightStatus status,
+                                     @AuthenticationPrincipal SecurityUserDetails principal,
                                      RedirectAttributes ra) {
         try {
             Flight updated = Flight.builder()
@@ -119,9 +129,12 @@ public class FlightManagerController {
                     .status(status)
                     .build();
             flightService.update(id, updated);
+            auditLog.info("FLIGHT_UPDATE actor={} flightId={} flightNumber={} status={}",
+                    principal.getUsername(), id, flightNumber, status);
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage", "Рейс " + flightNumber + " оновлено.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка оновлення рейсу id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка оновлення: " + ex.getMessage());
         }
@@ -129,12 +142,16 @@ public class FlightManagerController {
     }
 
     @PostMapping("/{id}/delete")
-    public ModelAndView deleteFlight(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView deleteFlight(@PathVariable Long id,
+                                     @AuthenticationPrincipal SecurityUserDetails principal,
+                                     RedirectAttributes ra) {
         try {
             flightService.delete(id);
+            auditLog.info("FLIGHT_DELETE actor={} flightId={}", principal.getUsername(), id);
             ra.addFlashAttribute("toastType", "info");
             ra.addFlashAttribute("toastMessage", "Рейс видалено.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка видалення рейсу id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка видалення: " + ex.getMessage());
         }

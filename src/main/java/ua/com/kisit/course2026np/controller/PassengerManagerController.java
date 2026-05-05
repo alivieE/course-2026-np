@@ -1,5 +1,7 @@
 package ua.com.kisit.course2026np.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,9 @@ import java.util.Optional;
 @RequestMapping("/admin/passengers")
 public class PassengerManagerController {
 
+    private static final Logger log = LoggerFactory.getLogger(PassengerManagerController.class);
+    private static final Logger auditLog = LoggerFactory.getLogger("AUDIT");
+
     private final PassengerService passengerService;
 
     public PassengerManagerController(PassengerService passengerService) {
@@ -25,6 +30,8 @@ public class PassengerManagerController {
     @GetMapping
     public ModelAndView listPassengers(@RequestParam(required = false) String search,
                                        @AuthenticationPrincipal SecurityUserDetails principal) {
+        log.debug("Перегляд списку пасажирів користувачем {}, search={}",
+                principal.getUsername(), search);
         ModelAndView mv = new ModelAndView("admin/passengers");
         mv.addObject("title", "Адмінпанель — Пасажири");
         mv.addObject("currentUser", principal.getUser());
@@ -57,6 +64,7 @@ public class PassengerManagerController {
                                         @RequestParam(required = false) String phone,
                                         @RequestParam(required = false) String dateOfBirth,
                                         @RequestParam(required = false) Passenger.Gender gender,
+                                        @AuthenticationPrincipal SecurityUserDetails principal,
                                         RedirectAttributes ra) {
         try {
             Passenger passenger = Passenger.builder()
@@ -69,12 +77,15 @@ public class PassengerManagerController {
                             ? LocalDate.parse(dateOfBirth) : null)
                     .gender(gender)
                     .build();
-            passengerService.create(passenger);
+            Passenger created = passengerService.create(passenger);
+            auditLog.info("PASSENGER_CREATE actor={} passengerId={} email={} fullName=\"{} {}\"",
+                    principal.getUsername(), created.getId(), email, lastName, firstName);
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage",
                     "Пасажира " + lastName + " " + firstName + " створено.");
             return new ModelAndView("redirect:/admin/passengers");
         } catch (IllegalArgumentException ex) {
+            log.warn("Не вдалось створити пасажира {}: {}", email, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", ex.getMessage());
             return new ModelAndView("redirect:/admin/passengers/new");
@@ -109,6 +120,7 @@ public class PassengerManagerController {
                                         @RequestParam(required = false) String phone,
                                         @RequestParam(required = false) String dateOfBirth,
                                         @RequestParam(required = false) Passenger.Gender gender,
+                                        @AuthenticationPrincipal SecurityUserDetails principal,
                                         RedirectAttributes ra) {
         try {
             Passenger updated = Passenger.builder()
@@ -122,9 +134,12 @@ public class PassengerManagerController {
                     .gender(gender)
                     .build();
             passengerService.update(id, updated);
+            auditLog.info("PASSENGER_UPDATE actor={} passengerId={} email={}",
+                    principal.getUsername(), id, email);
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage", "Пасажира оновлено.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка оновлення пасажира id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка оновлення: " + ex.getMessage());
         }
@@ -132,12 +147,16 @@ public class PassengerManagerController {
     }
 
     @PostMapping("/{id}/delete")
-    public ModelAndView deletePassenger(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView deletePassenger(@PathVariable Long id,
+                                        @AuthenticationPrincipal SecurityUserDetails principal,
+                                        RedirectAttributes ra) {
         try {
             passengerService.delete(id);
+            auditLog.info("PASSENGER_DELETE actor={} passengerId={}", principal.getUsername(), id);
             ra.addFlashAttribute("toastType", "info");
             ra.addFlashAttribute("toastMessage", "Пасажира видалено.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка видалення пасажира id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка видалення: " + ex.getMessage());
         }

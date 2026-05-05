@@ -1,5 +1,7 @@
 package ua.com.kisit.course2026np.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,9 @@ import java.util.Optional;
 @RequestMapping("/admin/aircrafts")
 public class AircraftManagerController {
 
+    private static final Logger log = LoggerFactory.getLogger(AircraftManagerController.class);
+    private static final Logger auditLog = LoggerFactory.getLogger("AUDIT");
+
     private final AircraftService aircraftService;
 
     public AircraftManagerController(AircraftService aircraftService) {
@@ -23,6 +28,7 @@ public class AircraftManagerController {
 
     @GetMapping
     public ModelAndView listAircrafts(@AuthenticationPrincipal SecurityUserDetails principal) {
+        log.debug("Перегляд списку літаків користувачем {}", principal.getUsername());
         ModelAndView mv = new ModelAndView("admin/aircrafts");
         mv.addObject("title", "Адмінпанель — Літаки");
         mv.addObject("currentUser", principal.getUser());
@@ -49,6 +55,7 @@ public class AircraftManagerController {
                                        @RequestParam Integer totalSeats,
                                        @RequestParam(required = false) Integer maxRangeKm,
                                        @RequestParam Aircraft.AircraftStatus status,
+                                       @AuthenticationPrincipal SecurityUserDetails principal,
                                        RedirectAttributes ra) {
         try {
             Aircraft aircraft = Aircraft.builder()
@@ -60,11 +67,14 @@ public class AircraftManagerController {
                     .maxRangeKm(maxRangeKm)
                     .status(status)
                     .build();
-            aircraftService.create(aircraft);
+            Aircraft created = aircraftService.create(aircraft);
+            auditLog.info("AIRCRAFT_CREATE actor={} aircraftId={} regNumber={} model={}",
+                    principal.getUsername(), created.getId(), registrationNumber, model);
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage", "Літак " + registrationNumber + " успішно створено.");
             return new ModelAndView("redirect:/admin/aircrafts");
         } catch (IllegalArgumentException ex) {
+            log.warn("Не вдалось створити літак {}: {}", registrationNumber, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", ex.getMessage());
             return new ModelAndView("redirect:/admin/aircrafts/new");
@@ -99,6 +109,7 @@ public class AircraftManagerController {
                                        @RequestParam Integer totalSeats,
                                        @RequestParam(required = false) Integer maxRangeKm,
                                        @RequestParam Aircraft.AircraftStatus status,
+                                       @AuthenticationPrincipal SecurityUserDetails principal,
                                        RedirectAttributes ra) {
         try {
             Aircraft updated = Aircraft.builder()
@@ -111,9 +122,12 @@ public class AircraftManagerController {
                     .status(status)
                     .build();
             aircraftService.update(id, updated);
+            auditLog.info("AIRCRAFT_UPDATE actor={} aircraftId={} regNumber={} status={}",
+                    principal.getUsername(), id, registrationNumber, status);
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage", "Літак " + registrationNumber + " оновлено.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка оновлення літака id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка оновлення: " + ex.getMessage());
         }
@@ -121,26 +135,36 @@ public class AircraftManagerController {
     }
 
     @PostMapping("/{id}/delete")
-    public ModelAndView deleteAircraft(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView deleteAircraft(@PathVariable Long id,
+                                       @AuthenticationPrincipal SecurityUserDetails principal,
+                                       RedirectAttributes ra) {
         try {
             aircraftService.delete(id);
+            auditLog.info("AIRCRAFT_DELETE actor={} aircraftId={}", principal.getUsername(), id);
             ra.addFlashAttribute("toastType", "info");
             ra.addFlashAttribute("toastMessage", "Літак видалено.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка видалення літака id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка видалення: " + ex.getMessage());
         }
         return new ModelAndView("redirect:/admin/aircrafts");
     }
 
+
     @PostMapping("/{id}/maintenance")
-    public ModelAndView sendToMaintenance(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView sendToMaintenance(@PathVariable Long id,
+                                          @AuthenticationPrincipal SecurityUserDetails principal,
+                                          RedirectAttributes ra) {
         try {
             Aircraft aircraft = aircraftService.sendToMaintenance(id);
+            auditLog.info("AIRCRAFT_MAINTENANCE actor={} aircraftId={} regNumber={}",
+                    principal.getUsername(), id, aircraft.getRegistrationNumber());
             ra.addFlashAttribute("toastType", "info");
             ra.addFlashAttribute("toastMessage",
                     "Літак " + aircraft.getRegistrationNumber() + " відправлено на технічне обслуговування.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка відправлення літака id={} на ТО: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка: " + ex.getMessage());
         }
@@ -148,13 +172,18 @@ public class AircraftManagerController {
     }
 
     @PostMapping("/{id}/activate")
-    public ModelAndView activate(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView activate(@PathVariable Long id,
+                                 @AuthenticationPrincipal SecurityUserDetails principal,
+                                 RedirectAttributes ra) {
         try {
             Aircraft aircraft = aircraftService.activate(id);
+            auditLog.info("AIRCRAFT_ACTIVATE actor={} aircraftId={} regNumber={}",
+                    principal.getUsername(), id, aircraft.getRegistrationNumber());
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage",
                     "Літак " + aircraft.getRegistrationNumber() + " повернуто в експлуатацію.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка активації літака id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка: " + ex.getMessage());
         }
@@ -162,13 +191,18 @@ public class AircraftManagerController {
     }
 
     @PostMapping("/{id}/retire")
-    public ModelAndView retire(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView retire(@PathVariable Long id,
+                               @AuthenticationPrincipal SecurityUserDetails principal,
+                               RedirectAttributes ra) {
         try {
             Aircraft aircraft = aircraftService.retire(id);
+            auditLog.info("AIRCRAFT_RETIRE actor={} aircraftId={} regNumber={}",
+                    principal.getUsername(), id, aircraft.getRegistrationNumber());
             ra.addFlashAttribute("toastType", "info");
             ra.addFlashAttribute("toastMessage",
                     "Літак " + aircraft.getRegistrationNumber() + " списано з експлуатації.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка списання літака id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка: " + ex.getMessage());
         }
@@ -177,6 +211,7 @@ public class AircraftManagerController {
 
     @GetMapping("/maintenance-needed")
     public ModelAndView listMaintenanceNeeded(@AuthenticationPrincipal SecurityUserDetails principal) {
+        log.info("Перегляд списку літаків що потребують ТО користувачем {}", principal.getUsername());
         ModelAndView mv = new ModelAndView("admin/aircrafts");
         mv.addObject("title", "Літаки, що потребують ТО");
         mv.addObject("currentUser", principal.getUser());

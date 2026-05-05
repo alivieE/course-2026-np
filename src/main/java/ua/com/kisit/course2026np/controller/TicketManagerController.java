@@ -1,5 +1,7 @@
 package ua.com.kisit.course2026np.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.com.kisit.course2026np.entity.Flight;
 import ua.com.kisit.course2026np.entity.Passenger;
 import ua.com.kisit.course2026np.entity.Ticket;
+import ua.com.kisit.course2026np.entity.User;
 import ua.com.kisit.course2026np.security.SecurityUserDetails;
 import ua.com.kisit.course2026np.service.FlightService;
 import ua.com.kisit.course2026np.service.PassengerService;
@@ -19,6 +22,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin/tickets")
 public class TicketManagerController {
+
+    private static final Logger log = LoggerFactory.getLogger(TicketManagerController.class);
+    private static final Logger auditLog = LoggerFactory.getLogger("AUDIT");
 
     private final TicketService ticketService;
     private final PassengerService passengerService;
@@ -34,6 +40,7 @@ public class TicketManagerController {
 
     @GetMapping
     public ModelAndView listTickets(@AuthenticationPrincipal SecurityUserDetails principal) {
+        log.debug("Перегляд списку квитків користувачем {}", principal.getUsername());
         ModelAndView mv = new ModelAndView("admin/tickets");
         mv.addObject("title", "Адмінпанель — Квитки");
         mv.addObject("currentUser", principal.getUser());
@@ -63,6 +70,7 @@ public class TicketManagerController {
                                      @RequestParam Ticket.TicketStatus status,
                                      @RequestParam Long passengerId,
                                      @RequestParam Long flightId,
+                                     @AuthenticationPrincipal SecurityUserDetails principal,
                                      RedirectAttributes ra) {
         try {
             Passenger passenger = passengerService.getById(passengerId)
@@ -79,11 +87,15 @@ public class TicketManagerController {
                     .passenger(passenger)
                     .flight(flight)
                     .build();
-            ticketService.create(ticket);
+            Ticket created = ticketService.create(ticket);
+            auditLog.info("TICKET_CREATE actor={} ticketId={} ticketNumber={} flight={} passenger={}",
+                    principal.getUsername(), created.getId(), ticketNumber,
+                    flight.getFlightNumber(), passenger.getEmail());
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage", "Квиток " + ticketNumber + " успішно створено.");
             return new ModelAndView("redirect:/admin/tickets");
         } catch (IllegalArgumentException ex) {
+            log.warn("Не вдалось створити квиток {}: {}", ticketNumber, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", ex.getMessage());
             return new ModelAndView("redirect:/admin/tickets/new");
@@ -121,6 +133,7 @@ public class TicketManagerController {
                                      @RequestParam Ticket.TicketStatus status,
                                      @RequestParam Long passengerId,
                                      @RequestParam Long flightId,
+                                     @AuthenticationPrincipal SecurityUserDetails principal,
                                      RedirectAttributes ra) {
         try {
             Passenger passenger = passengerService.getById(passengerId)
@@ -138,9 +151,12 @@ public class TicketManagerController {
                     .flight(flight)
                     .build();
             ticketService.update(id, updated);
+            auditLog.info("TICKET_UPDATE actor={} ticketId={} ticketNumber={} status={}",
+                    principal.getUsername(), id, ticketNumber, status);
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage", "Квиток оновлено.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка оновлення квитка id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка оновлення: " + ex.getMessage());
         }
@@ -148,26 +164,36 @@ public class TicketManagerController {
     }
 
     @PostMapping("/{id}/delete")
-    public ModelAndView deleteTicket(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView deleteTicket(@PathVariable Long id,
+                                     @AuthenticationPrincipal SecurityUserDetails principal,
+                                     RedirectAttributes ra) {
         try {
             ticketService.delete(id);
+            auditLog.info("TICKET_DELETE actor={} ticketId={}", principal.getUsername(), id);
             ra.addFlashAttribute("toastType", "info");
             ra.addFlashAttribute("toastMessage", "Квиток видалено.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка видалення квитка id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка видалення: " + ex.getMessage());
         }
         return new ModelAndView("redirect:/admin/tickets");
     }
 
+
     @PostMapping("/{id}/confirm")
-    public ModelAndView confirmTicket(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView confirmTicket(@PathVariable Long id,
+                                      @AuthenticationPrincipal SecurityUserDetails principal,
+                                      RedirectAttributes ra) {
         try {
             Ticket ticket = ticketService.confirmTicket(id);
+            auditLog.info("TICKET_CONFIRM actor={} ticketId={} ticketNumber={}",
+                    principal.getUsername(), id, ticket.getTicketNumber());
             ra.addFlashAttribute("toastType", "success");
             ra.addFlashAttribute("toastMessage",
                     "Квиток " + ticket.getTicketNumber() + " підтверджено.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка підтвердження квитка id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка підтвердження: " + ex.getMessage());
         }
@@ -175,13 +201,18 @@ public class TicketManagerController {
     }
 
     @PostMapping("/{id}/cancel")
-    public ModelAndView cancelTicket(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView cancelTicket(@PathVariable Long id,
+                                     @AuthenticationPrincipal SecurityUserDetails principal,
+                                     RedirectAttributes ra) {
         try {
             Ticket ticket = ticketService.cancelTicket(id);
+            auditLog.info("TICKET_CANCEL actor={} ticketId={} ticketNumber={}",
+                    principal.getUsername(), id, ticket.getTicketNumber());
             ra.addFlashAttribute("toastType", "info");
             ra.addFlashAttribute("toastMessage",
                     "Квиток " + ticket.getTicketNumber() + " скасовано.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка скасування квитка id={}: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка скасування: " + ex.getMessage());
         }
@@ -189,13 +220,18 @@ public class TicketManagerController {
     }
 
     @PostMapping("/{id}/use")
-    public ModelAndView markAsUsed(@PathVariable Long id, RedirectAttributes ra) {
+    public ModelAndView markAsUsed(@PathVariable Long id,
+                                   @AuthenticationPrincipal SecurityUserDetails principal,
+                                   RedirectAttributes ra) {
         try {
             Ticket ticket = ticketService.markAsUsed(id);
+            auditLog.info("TICKET_USE actor={} ticketId={} ticketNumber={}",
+                    principal.getUsername(), id, ticket.getTicketNumber());
             ra.addFlashAttribute("toastType", "info");
             ra.addFlashAttribute("toastMessage",
                     "Квиток " + ticket.getTicketNumber() + " позначено як використаний.");
         } catch (RuntimeException ex) {
+            log.warn("Помилка позначення квитка id={} як використаного: {}", id, ex.getMessage());
             ra.addFlashAttribute("toastType", "danger");
             ra.addFlashAttribute("toastMessage", "Помилка: " + ex.getMessage());
         }
@@ -203,7 +239,9 @@ public class TicketManagerController {
     }
 
     @GetMapping("/revenue/{flightId}")
-    public ModelAndView showFlightRevenue(@PathVariable Long flightId, RedirectAttributes ra) {
+    public ModelAndView showFlightRevenue(@PathVariable Long flightId,
+                                          @AuthenticationPrincipal SecurityUserDetails principal,
+                                          RedirectAttributes ra) {
         Optional<Flight> flightOpt = flightService.getById(flightId);
         if (flightOpt.isEmpty()) {
             ra.addFlashAttribute("toastType", "danger");
@@ -213,6 +251,9 @@ public class TicketManagerController {
 
         BigDecimal revenue = ticketService.calculateRevenueByFlight(flightId);
         long sold = ticketService.countSoldTicketsByFlight(flightId);
+
+        log.info("Перегляд статистики рейсу {} користувачем {}: продано={}, дохід={}",
+                flightOpt.get().getFlightNumber(), principal.getUsername(), sold, revenue);
 
         ra.addFlashAttribute("toastType", "info");
         ra.addFlashAttribute("toastMessage",

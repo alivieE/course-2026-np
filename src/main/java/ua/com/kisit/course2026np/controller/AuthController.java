@@ -1,6 +1,8 @@
 package ua.com.kisit.course2026np.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,9 @@ import ua.com.kisit.course2026np.service.UserService;
 
 @Controller
 public class AuthController {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger securityLog = LoggerFactory.getLogger("SECURITY");
 
     public static final String SESSION_USER_ATTR = "loginUser";
 
@@ -53,9 +58,9 @@ public class AuthController {
                                        @RequestParam("password") String password,
                                        HttpServletRequest request,
                                        RedirectAttributes redirectAttrs) {
+        log.debug("Спроба реєстрації нового користувача: email={}", email);
         try {
             User user = userService.register(firstName, lastName, email, password);
-
 
             SecurityUserDetails principal = new SecurityUserDetails(user);
             Authentication auth = new UsernamePasswordAuthenticationToken(
@@ -64,12 +69,17 @@ public class AuthController {
             request.getSession().setAttribute(
                     "SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
+            securityLog.info("REGISTER_SUCCESS user={} role={} ip={}",
+                    user.getEmail(), user.getRole(), request.getRemoteAddr());
+
             redirectAttrs.addFlashAttribute("toastType", "success");
             redirectAttrs.addFlashAttribute("toastMessage",
                     "Акаунт створено! Ласкаво просимо, " + user.getFirstName() + ".");
 
             return new ModelAndView("redirect:/");
         } catch (IllegalArgumentException ex) {
+            securityLog.warn("REGISTER_FAILURE email={} ip={} reason={}",
+                    email, request.getRemoteAddr(), ex.getMessage());
             ModelAndView mv = new ModelAndView("register");
             mv.addObject("title", "Реєстрація - SkyAirlines");
             mv.addObject("error", ex.getMessage());

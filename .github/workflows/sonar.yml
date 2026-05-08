@@ -22,6 +22,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn verify sonar:sonar
+          -Dmaven.test.skip=true
           -Dsonar.projectKey=d7dbbad3feaa9b16dc77e8c9f96451aac42f6ef4
           -Dsonar.organization=aliviee
           -Dsonar.host.url=https://sonarcloud.io

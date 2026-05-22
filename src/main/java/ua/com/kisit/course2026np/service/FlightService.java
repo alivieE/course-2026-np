@@ -3,6 +3,8 @@ package ua.com.kisit.course2026np.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.kisit.course2026np.entity.Flight;
+import ua.com.kisit.course2026np.repository.CrewMemberRepository;
+import ua.com.kisit.course2026np.repository.CrewRepository;
 import ua.com.kisit.course2026np.repository.FlightRepository;
 
 import java.util.List;
@@ -13,9 +15,18 @@ import java.util.Optional;
 public class FlightService {
 
     private final FlightRepository flightRepository;
+    private final TicketService ticketService;
+    private final CrewRepository crewRepository;
+    private final CrewMemberRepository crewMemberRepository;
 
-    public FlightService(FlightRepository flightRepository) {
+    public FlightService(FlightRepository flightRepository,
+                         TicketService ticketService,
+                         CrewRepository crewRepository,
+                         CrewMemberRepository crewMemberRepository) {
         this.flightRepository = flightRepository;
+        this.ticketService = ticketService;
+        this.crewRepository = crewRepository;
+        this.crewMemberRepository = crewMemberRepository;
     }
 
     public List<Flight> getAllFlights() {
@@ -61,6 +72,11 @@ public class FlightService {
     public void delete(Long id) {
         if (!flightRepository.existsById(id)) {
             throw new RuntimeException("Рейс не знайдено: " + id);
+        }
+        crewMemberRepository.clearCurrentFlightByFlightId(id);
+        ticketService.deleteByFlightId(id);
+        if (crewRepository.existsByFlightId(id)) {
+            crewRepository.deleteByFlightId(id);
         }
         flightRepository.deleteById(id);
     }

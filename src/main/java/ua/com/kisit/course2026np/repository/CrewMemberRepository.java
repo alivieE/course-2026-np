@@ -1,6 +1,7 @@
 package ua.com.kisit.course2026np.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,4 +23,8 @@ public interface CrewMemberRepository extends JpaRepository<CrewMember, Long> {
             "AND cm.experienceYears >= :minExperience")
     List<CrewMember> findExperiencedByRole(@Param("role") CrewRole role,
                                            @Param("minExperience") Integer minExperience);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE CrewMember cm SET cm.currentFlight = null WHERE cm.currentFlight.id = :flightId")
+    void clearCurrentFlightByFlightId(@Param("flightId") Long flightId);
 }

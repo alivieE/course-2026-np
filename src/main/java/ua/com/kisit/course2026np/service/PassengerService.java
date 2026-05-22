@@ -3,6 +3,7 @@ package ua.com.kisit.course2026np.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.kisit.course2026np.entity.Passenger;
+import ua.com.kisit.course2026np.entity.User;
 import ua.com.kisit.course2026np.repository.PassengerRepository;
 
 import java.util.List;
@@ -69,6 +70,21 @@ public class PassengerService {
 
     public Optional<Passenger> findByPassport(String passportNumber) {
         return passengerRepository.findByPassportNumber(passportNumber);
+    }
+
+    public Optional<Passenger> findByEmail(String email) {
+        return passengerRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public Passenger getOrCreateForUser(User user) {
+        return passengerRepository.findByEmail(user.getEmail())
+                .orElseGet(() -> create(Passenger.builder()
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .email(user.getEmail())
+                        .passportNumber("USR" + String.format("%05d", user.getId()))
+                        .build()));
     }
 
     private void validateUniqueness(Passenger passenger, Long currentId) {

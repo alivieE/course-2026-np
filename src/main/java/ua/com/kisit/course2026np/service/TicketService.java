@@ -68,6 +68,11 @@ public class TicketService {
     }
 
     @Transactional
+    public void deleteByFlightId(Long flightId) {
+        ticketRepository.deleteByFlightId(flightId);
+    }
+
+    @Transactional
     public Ticket confirmTicket(Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Квиток не знайдено: " + ticketId));

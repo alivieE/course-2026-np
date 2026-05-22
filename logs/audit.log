@@ -1,0 +1,18 @@
+2026-05-22 15:08:42.279 INFO  [http-nio-8080-exec-9] AUDIT - AIRCRAFT_CREATE actor=admin@skyair.ua aircraftId=1 regNumber=UR-12345 model=Boeing 137
+2026-05-22 15:09:24.869 INFO  [http-nio-8080-exec-3] AUDIT - AIRCRAFT_CREATE actor=admin@skyair.ua aircraftId=2 regNumber=UR-23456 model=Boeing 111
+2026-05-22 15:10:11.473 INFO  [http-nio-8080-exec-5] AUDIT - AIRCRAFT_CREATE actor=admin@skyair.ua aircraftId=3 regNumber=UR-34567 model=Boeing 098
+2026-05-22 15:10:39.096 INFO  [http-nio-8080-exec-10] AUDIT - AIRCRAFT_CREATE actor=admin@skyair.ua aircraftId=4 regNumber=UR-45678 model=Boeing 456
+2026-05-22 15:23:58.425 INFO  [http-nio-8080-exec-10] AUDIT - FLIGHT_CREATE actor=admin@skyair.ua flightId=8 flightNumber=BA-234 from=Берлін to=Лондон
+2026-05-22 15:24:33.393 INFO  [http-nio-8080-exec-3] AUDIT - FLIGHT_CREATE actor=admin@skyair.ua flightId=9 flightNumber=LH-890 from=Барселона to=Афіни
+2026-05-22 15:31:09.943 INFO  [http-nio-8080-exec-8] AUDIT - FLIGHT_CREATE actor=admin@skyair.ua flightId=11 flightNumber=OS-654 from=Відень to=Кракід
+2026-05-22 15:33:13.651 INFO  [http-nio-8080-exec-2] AUDIT - TICKET_CREATE actor=admin@skyair.ua ticketId=3 ticketNumber=TK-2345689 flight=OS-654 passenger=anhelina.tkachenko@gmail.com
+2026-05-22 15:34:04.565 INFO  [http-nio-8080-exec-7] AUDIT - TICKET_CREATE actor=admin@skyair.ua ticketId=4 ticketNumber=TK-1233445 flight=BA-234 passenger=ivan.melnyk@gmail.com
+2026-05-22 15:34:18.730 INFO  [http-nio-8080-exec-9] AUDIT - TICKET_USE actor=admin@skyair.ua ticketId=1 ticketNumber=TK-1234567
+2026-05-22 16:15:28.583 INFO  [http-nio-8080-exec-3] AUDIT - FLIGHT_CREATE actor=admin@skyair.ua flightId=12 flightNumber=SA-783 from=Берлін to=Лондон
+2026-05-22 16:42:24.879 INFO  [http-nio-8080-exec-10] AUDIT - FLIGHT_UPDATE actor=admin@skyair.ua flightId=1 flightNumber=SA-090 status=IN_PROGRESS
+2026-05-22 16:52:12.500 INFO  [http-nio-8080-exec-6] AUDIT - FLIGHT_DELETE actor=admin@skyair.ua flightId=2
+2026-05-22 16:52:18.800 INFO  [http-nio-8080-exec-8] AUDIT - FLIGHT_DELETE actor=admin@skyair.ua flightId=11
+2026-05-22 16:52:26.987 INFO  [http-nio-8080-exec-1] AUDIT - AIRCRAFT_MAINTENANCE actor=admin@skyair.ua aircraftId=3 regNumber=UR-34567
+2026-05-22 16:52:31.171 INFO  [http-nio-8080-exec-3] AUDIT - AIRCRAFT_ACTIVATE actor=admin@skyair.ua aircraftId=3 regNumber=UR-34567
+2026-05-22 16:56:20.107 INFO  [http-nio-8080-exec-5] AUDIT - TICKET_CONFIRM actor=admin@skyair.ua ticketId=5 ticketNumber=TK-1754896
+2026-05-22 17:19:50.558 INFO  [http-nio-8080-exec-4] AUDIT - FLIGHT_CREATE actor=admin@skyair.ua flightId=13 flightNumber=SA-000 from=Амстердам to=Париж

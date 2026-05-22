@@ -1,0 +1,15 @@
+2026-05-22 14:40:47.534 WARN  [http-nio-8080-exec-10] SECURITY - REGISTER_FAILURE email=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1 reason=Користувач з email qwertyuio@gamil.com вже зареєстрований
+2026-05-22 14:40:53.825 INFO  [http-nio-8080-exec-6] SECURITY - LOGIN_SUCCESS user=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1
+2026-05-22 14:41:59.546 INFO  [http-nio-8080-exec-2] SECURITY - LOGOUT user=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1
+2026-05-22 14:42:52.760 INFO  [http-nio-8080-exec-6] SECURITY - LOGIN_SUCCESS user=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1
+2026-05-22 14:51:12.346 INFO  [http-nio-8080-exec-10] SECURITY - LOGOUT user=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1
+2026-05-22 14:51:21.719 INFO  [http-nio-8080-exec-4] SECURITY - LOGIN_SUCCESS user=admin@skyair.ua ip=0:0:0:0:0:0:0:1
+2026-05-22 15:58:07.948 INFO  [http-nio-8080-exec-3] SECURITY - LOGIN_SUCCESS user=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1
+2026-05-22 16:01:11.518 INFO  [http-nio-8080-exec-3] SECURITY - LOGIN_SUCCESS user=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1
+2026-05-22 16:09:32.607 INFO  [http-nio-8080-exec-4] SECURITY - LOGOUT user=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1
+2026-05-22 16:09:40.766 INFO  [http-nio-8080-exec-6] SECURITY - LOGIN_SUCCESS user=admin@skyair.ua ip=0:0:0:0:0:0:0:1
+2026-05-22 16:12:34.888 INFO  [http-nio-8080-exec-4] SECURITY - LOGOUT user=admin@skyair.ua ip=0:0:0:0:0:0:0:1
+2026-05-22 16:14:25.704 INFO  [http-nio-8080-exec-9] SECURITY - LOGIN_SUCCESS user=admin@skyair.ua ip=0:0:0:0:0:0:0:1
+2026-05-22 16:41:12.148 INFO  [http-nio-8080-exec-2] SECURITY - LOGIN_SUCCESS user=admin@skyair.ua ip=0:0:0:0:0:0:0:1
+2026-05-22 16:48:11.564 INFO  [http-nio-8080-exec-3] SECURITY - LOGIN_SUCCESS user=admin@skyair.ua ip=0:0:0:0:0:0:0:1
+2026-05-22 16:52:07.087 INFO  [http-nio-8080-exec-3] SECURITY - LOGIN_SUCCESS user=admin@skyair.ua ip=0:0:0:0:0:0:0:1

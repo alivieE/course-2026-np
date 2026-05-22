@@ -45,6 +45,10 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="/">Головна</a></li>
                 <li class="nav-item"><a class="nav-link active" href="/flights">Розклад рейсів</a></li>
+                <#if currentUser??>
+                    <li class="nav-item"><a class="nav-link" href="/booking">Оформлення квитка</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/my-tickets">Мої квитки</a></li>
+                </#if>
                 <#if currentUser?? && currentUser.role?string == "ADMIN">
                     <li class="nav-item">
                         <a class="nav-link text-warning fw-bold" href="/admin/flights">
@@ -131,7 +135,7 @@
                             <#if flight.status?string == "CANCELLED" || flight.status?string == "COMPLETED">
                                 <button class="btn btn-outline-secondary w-100 fw-bold" disabled>Недоступно</button>
                             <#else>
-                                <a href="/booking" class="btn btn-outline-primary w-100 fw-bold">Вибрати квиток</a>
+                                <a href="/booking?flightId=${flight.id}" class="btn btn-outline-primary w-100 fw-bold">Вибрати квиток</a>
                             </#if>
                         </div>
                     </div>

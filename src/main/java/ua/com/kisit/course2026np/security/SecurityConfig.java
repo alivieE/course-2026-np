@@ -54,7 +54,8 @@ public class SecurityConfig {
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        .requestMatchers("/booking", "/booking/**").authenticated()
+                        .requestMatchers("/booking", "/booking/**",
+                                "/my-tickets", "/my-tickets/**").authenticated()
 
                         .anyRequest().authenticated()
                 )

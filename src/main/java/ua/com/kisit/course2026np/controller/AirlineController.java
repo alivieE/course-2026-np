@@ -44,11 +44,4 @@ public class AirlineController {
         return modelAndView;
     }
 
-    @GetMapping("/booking")
-    public ModelAndView booking(@AuthenticationPrincipal SecurityUserDetails principal) {
-        ModelAndView modelAndView = new ModelAndView("booking");
-        modelAndView.addObject("title", "Оформлення квитка - SkyAirlines");
-        modelAndView.addObject("currentUser", principal.getUser());
-        return modelAndView;
-    }
 }

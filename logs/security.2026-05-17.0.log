@@ -1,0 +1,5 @@
+2026-05-17 23:07:23.810 INFO  [http-nio-8080-exec-5] SECURITY - LOGIN_SUCCESS user=admin@skyair.ua ip=0:0:0:0:0:0:0:1
+2026-05-17 23:13:01.027 INFO  [http-nio-8080-exec-4] SECURITY - LOGOUT user=admin@skyair.ua ip=0:0:0:0:0:0:0:1
+2026-05-17 23:26:53.666 INFO  [http-nio-8080-exec-3] SECURITY - LOGIN_SUCCESS user=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1
+2026-05-17 23:27:03.615 INFO  [http-nio-8080-exec-10] SECURITY - LOGOUT user=qwertyuio@gamil.com ip=0:0:0:0:0:0:0:1
+2026-05-17 23:27:11.824 INFO  [http-nio-8080-exec-8] SECURITY - LOGIN_SUCCESS user=admin@skyair.ua ip=0:0:0:0:0:0:0:1

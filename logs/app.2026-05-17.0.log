@@ -1,0 +1,274 @@
+2026-05-17 22:57:32.936 INFO  [restartedMain] ua.com.kisit.course2026np.Main - Starting Main using Java 24.0.2 with PID 16004 (D:\ООП\practica\git\course-2026-np\target\classes started by User in D:\ООП\practica\git\course-2026-np)
+2026-05-17 22:57:32.956 DEBUG [restartedMain] ua.com.kisit.course2026np.Main - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-05-17 22:57:32.957 INFO  [restartedMain] ua.com.kisit.course2026np.Main - No active profile set, falling back to 1 default profile: "default"
+2026-05-17 22:57:33.046 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-05-17 22:57:33.046 INFO  [restartedMain] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-05-17 22:57:33.236 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-05-17 22:57:35.204 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-05-17 22:57:35.205 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-05-17 22:57:35.268 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.AircraftRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:57:35.271 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.CrewMemberRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:57:35.272 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.CrewRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:57:35.273 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.FlightRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:57:35.274 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.PassengerRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:57:35.275 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.TicketRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:57:35.277 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:57:35.277 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 64 ms. Found 0 JDBC repository interfaces.
+2026-05-17 22:57:35.291 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-05-17 22:57:35.292 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-17 22:57:35.345 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 47 ms. Found 7 JPA repository interfaces.
+2026-05-17 22:57:36.353 INFO  [restartedMain] o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-17 22:57:36.370 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:57:36.373 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-17 22:57:36.374 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-05-17 22:57:36.437 INFO  [restartedMain] o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 3389 ms
+2026-05-17 22:57:36.813 INFO  [restartedMain] org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-17 22:57:36.925 INFO  [restartedMain] org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.1.Final
+2026-05-17 22:57:37.661 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-17 22:57:37.710 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Starting...
+2026-05-17 22:57:38.494 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - SkyAirlinesHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@45e89f79
+2026-05-17 22:57:38.496 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Start completed.
+2026-05-17 22:57:38.646 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-17 22:57:38.679 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/course-2026-np]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: course-2026-np/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-17 22:57:40.366 INFO  [restartedMain] org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-17 22:57:40.371 INFO  [restartedMain] org.hibernate.orm.jdbc.batch - HHH100501: Automatic JDBC statement batching enabled (maximum batch size 20)
+2026-05-17 22:57:41.612 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-17 22:57:41.787 INFO  [restartedMain] o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-17 22:57:44.088 INFO  [restartedMain] o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-05-17 22:57:44.088 WARN  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-05-17 22:57:44.128 WARN  [restartedMain] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-17 22:57:44.604 INFO  [restartedMain] o.s.b.w.a.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-17 22:57:45.874 INFO  [restartedMain] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-05-17 22:57:46.025 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:57:46.046 INFO  [restartedMain] o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-05-17 22:57:46.066 INFO  [restartedMain] ua.com.kisit.course2026np.Main - Started Main in 14.119 seconds (process running for 15.465)
+2026-05-17 22:57:46.240 INFO  [restartedMain] u.c.k.c.s.PasswordMigrationRunner - Усі паролі вже у форматі BCrypt — міграція не потрібна.
+2026-05-17 22:57:46.972 INFO  [RMI TCP Connection(2)-192.168.56.1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-17 22:57:46.972 INFO  [RMI TCP Connection(2)-192.168.56.1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-17 22:57:46.975 INFO  [RMI TCP Connection(2)-192.168.56.1] o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-05-17 22:59:21.251 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 49 class path changes (0 additions, 48 deletions, 1 modification)
+2026-05-17 22:59:21.258 INFO  [Thread-1] o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-17 22:59:21.260 INFO  [tomcat-shutdown] o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:59:21.264 INFO  [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-17 22:59:21.265 INFO  [Thread-1] o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:59:21.278 INFO  [Thread-1] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-17 22:59:21.283 INFO  [Thread-1] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Shutdown initiated...
+2026-05-17 22:59:21.291 INFO  [Thread-1] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Shutdown completed.
+2026-05-17 22:59:21.452 INFO  [restartedMain] ua.com.kisit.course2026np.Main - Starting Main using Java 24.0.2 with PID 16004 (D:\ООП\practica\git\course-2026-np\target\classes started by User in D:\ООП\practica\git\course-2026-np)
+2026-05-17 22:59:21.452 DEBUG [restartedMain] ua.com.kisit.course2026np.Main - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-05-17 22:59:21.452 INFO  [restartedMain] ua.com.kisit.course2026np.Main - No active profile set, falling back to 1 default profile: "default"
+2026-05-17 22:59:21.848 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-05-17 22:59:21.849 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-05-17 22:59:21.852 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 0 ms. Found 0 JDBC repository interfaces.
+2026-05-17 22:59:21.857 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-05-17 22:59:21.857 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-17 22:59:21.860 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 0 ms. Found 0 JPA repository interfaces.
+2026-05-17 22:59:22.052 INFO  [restartedMain] o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-17 22:59:22.053 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:59:22.054 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-17 22:59:22.054 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-05-17 22:59:22.100 INFO  [restartedMain] o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 643 ms
+2026-05-17 22:59:22.211 INFO  [restartedMain] org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-17 22:59:22.277 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-17 22:59:22.279 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Starting...
+2026-05-17 22:59:22.316 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - SkyAirlinesHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@67354ad5
+2026-05-17 22:59:22.317 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Start completed.
+2026-05-17 22:59:22.319 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-17 22:59:22.320 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/course-2026-np]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: course-2026-np/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-17 22:59:22.354 INFO  [restartedMain] org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-17 22:59:22.354 INFO  [restartedMain] org.hibernate.orm.jdbc.batch - HHH100501: Automatic JDBC statement batching enabled (maximum batch size 20)
+2026-05-17 22:59:22.355 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-17 22:59:22.422 WARN  [restartedMain] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-17 22:59:22.447 INFO  [restartedMain] o.s.b.w.a.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-17 22:59:22.786 WARN  [restartedMain] o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: ca8e88ea-a9f6-41f3-a98c-33c7111cd9bb
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-05-17 22:59:22.810 INFO  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-05-17 22:59:22.945 INFO  [restartedMain] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-05-17 22:59:23.037 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:59:23.042 INFO  [restartedMain] o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-05-17 22:59:23.050 INFO  [restartedMain] ua.com.kisit.course2026np.Main - Started Main in 1.66 seconds (process running for 112.449)
+2026-05-17 22:59:23.059 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   ManagementWebSecurityAutoConfiguration matched:
+      - @ConditionalOnClass found required classes 'org.springframework.security.web.util.matcher.RequestMatcher', 'org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointAutoConfiguration' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - AllNestedConditions 2 matched 0 did not; NestedCondition on DefaultWebSecurityCondition.Beans @ConditionalOnMissingBean (types: org.springframework.security.web.SecurityFilterChain; SearchStrategy: all) did not find any beans; NestedCondition on DefaultWebSecurityCondition.Classes @ConditionalOnClass found required classes 'org.springframework.security.web.SecurityFilterChain', 'org.springframework.security.config.annotation.web.builders.HttpSecurity' (DefaultWebSecurityCondition)
+
+   UserDetailsServiceAutoConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.security.authentication.AuthenticationManager' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - AnyNestedCondition 1 matched 2 did not; NestedCondition on MissingAlternativeUserDetailsManagerOrUserPropertiesConfigured.PasswordConfigured @ConditionalOnProperty (spring.security.user.password) did not find property 'spring.security.user.password'; NestedCondition on MissingAlternativeUserDetailsManagerOrUserPropertiesConfigured.NameConfigured @ConditionalOnProperty (spring.security.user.name) did not find property 'spring.security.user.name'; NestedCondition on MissingAlternativeUserDetailsManagerOrUserPropertiesConfigured.MissingAlternative @ConditionalOnMissingClass did not find unwanted classes 'org.springframework.security.oauth2.client.registration.ClientRegistrationRepository', 'org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector', 'org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository' (MissingAlternativeUserDetailsManagerOrUserPropertiesConfigured)
+      - @ConditionalOnMissingBean (types: org.springframework.security.authentication.AuthenticationManager,org.springframework.security.authentication.AuthenticationProvider,org.springframework.security.core.userdetails.UserDetailsService,org.springframework.security.authentication.AuthenticationManagerResolver,org.springframework.security.oauth2.jwt.JwtDecoder; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+
+Negative matches:
+-----------------
+
+    None
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-05-17 22:59:27.863 INFO  [File Watcher] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 48 class path changes (48 additions, 0 deletions, 0 modifications)
+2026-05-17 22:59:27.866 INFO  [Thread-5] o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-17 22:59:27.867 INFO  [tomcat-shutdown] o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:59:27.871 INFO  [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-05-17 22:59:27.872 INFO  [Thread-5] o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:59:27.876 INFO  [Thread-5] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-17 22:59:27.878 INFO  [Thread-5] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Shutdown initiated...
+2026-05-17 22:59:27.881 INFO  [Thread-5] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Shutdown completed.
+2026-05-17 22:59:28.047 INFO  [restartedMain] ua.com.kisit.course2026np.Main - Starting Main using Java 24.0.2 with PID 16004 (D:\ООП\practica\git\course-2026-np\target\classes started by User in D:\ООП\practica\git\course-2026-np)
+2026-05-17 22:59:28.048 DEBUG [restartedMain] ua.com.kisit.course2026np.Main - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-05-17 22:59:28.048 INFO  [restartedMain] ua.com.kisit.course2026np.Main - No active profile set, falling back to 1 default profile: "default"
+2026-05-17 22:59:28.617 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-05-17 22:59:28.617 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2026-05-17 22:59:28.629 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.AircraftRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:59:28.631 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.CrewMemberRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:59:28.633 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.CrewRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:59:28.635 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.FlightRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:59:28.636 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.PassengerRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:59:28.638 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.TicketRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:59:28.640 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JDBC - Could not safely identify store assignment for repository candidate interface ua.com.kisit.course2026np.repository.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2026-05-17 22:59:28.640 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 20 ms. Found 0 JDBC repository interfaces.
+2026-05-17 22:59:28.646 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-05-17 22:59:28.646 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-17 22:59:28.672 INFO  [restartedMain] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 22 ms. Found 7 JPA repository interfaces.
+2026-05-17 22:59:29.039 INFO  [restartedMain] o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-05-17 22:59:29.041 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:59:29.041 INFO  [restartedMain] o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-05-17 22:59:29.042 INFO  [restartedMain] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-05-17 22:59:29.086 INFO  [restartedMain] o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1035 ms
+2026-05-17 22:59:29.313 INFO  [restartedMain] org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-17 22:59:29.353 INFO  [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-17 22:59:29.354 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Starting...
+2026-05-17 22:59:29.377 INFO  [restartedMain] com.zaxxer.hikari.pool.HikariPool - SkyAirlinesHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@379f568f
+2026-05-17 22:59:29.377 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource - SkyAirlinesHikariPool - Start completed.
+2026-05-17 22:59:29.378 WARN  [restartedMain] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-05-17 22:59:29.379 INFO  [restartedMain] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/course-2026-np]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.45
+	Default catalog/schema: course-2026-np/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-17 22:59:29.827 INFO  [restartedMain] org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-17 22:59:29.827 INFO  [restartedMain] org.hibernate.orm.jdbc.batch - HHH100501: Automatic JDBC statement batching enabled (maximum batch size 20)
+2026-05-17 22:59:30.089 INFO  [restartedMain] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-17 22:59:30.925 INFO  [restartedMain] o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-05-17 22:59:30.927 WARN  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-05-17 22:59:30.952 WARN  [restartedMain] o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-17 22:59:31.414 INFO  [restartedMain] o.s.b.w.a.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-05-17 22:59:32.526 INFO  [restartedMain] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-05-17 22:59:32.649 INFO  [restartedMain] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-05-17 22:59:32.658 INFO  [restartedMain] o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-05-17 22:59:32.673 INFO  [restartedMain] ua.com.kisit.course2026np.Main - Started Main in 4.693 seconds (process running for 122.073)
+2026-05-17 22:59:32.696 INFO  [restartedMain] u.c.k.c.s.PasswordMigrationRunner - Усі паролі вже у форматі BCrypt — міграція не потрібна.
+2026-05-17 22:59:32.704 INFO  [restartedMain] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+    None
+
+
+Negative matches:
+-----------------
+
+   ManagementWebSecurityAutoConfiguration:
+      Did not match:
+         - AllNestedConditions 1 matched 1 did not; NestedCondition on DefaultWebSecurityCondition.Beans @ConditionalOnMissingBean (types: org.springframework.security.web.SecurityFilterChain; SearchStrategy: all) found beans of type 'org.springframework.security.web.SecurityFilterChain' securityFilterChain; NestedCondition on DefaultWebSecurityCondition.Classes @ConditionalOnClass found required classes 'org.springframework.security.web.SecurityFilterChain', 'org.springframework.security.config.annotation.web.builders.HttpSecurity' (DefaultWebSecurityCondition)
+      Matched:
+         - @ConditionalOnClass found required classes 'org.springframework.security.web.util.matcher.RequestMatcher', 'org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointAutoConfiguration' (OnClassCondition)
+         - found 'session' scope (OnWebApplicationCondition)
+
+   UserDetailsServiceAutoConfiguration:
+      Did not match:
+         - @ConditionalOnMissingBean (types: org.springframework.security.authentication.AuthenticationManager,org.springframework.security.authentication.AuthenticationProvider,org.springframework.security.core.userdetails.UserDetailsService,org.springframework.security.authentication.AuthenticationManagerResolver,org.springframework.security.oauth2.jwt.JwtDecoder; SearchStrategy: all) found beans of type 'org.springframework.security.authentication.AuthenticationManager' authenticationManager and found beans of type 'org.springframework.security.core.userdetails.UserDetailsService' customUserDetailsService and found beans of type 'org.springframework.security.authentication.AuthenticationProvider' authenticationProvider (OnBeanCondition)
+      Matched:
+         - @ConditionalOnClass found required class 'org.springframework.security.authentication.AuthenticationManager' (OnClassCondition)
+         - found 'session' scope (OnWebApplicationCondition)
+         - AnyNestedCondition 1 matched 2 did not; NestedCondition on MissingAlternativeUserDetailsManagerOrUserPropertiesConfigured.PasswordConfigured @ConditionalOnProperty (spring.security.user.password) did not find property 'spring.security.user.password'; NestedCondition on MissingAlternativeUserDetailsManagerOrUserPropertiesConfigured.NameConfigured @ConditionalOnProperty (spring.security.user.name) did not find property 'spring.security.user.name'; NestedCondition on MissingAlternativeUserDetailsManagerOrUserPropertiesConfigured.MissingAlternative @ConditionalOnMissingClass did not find unwanted classes 'org.springframework.security.oauth2.client.registration.ClientRegistrationRepository', 'org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector', 'org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository' (MissingAlternativeUserDetailsManagerOrUserPropertiesConfigured)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-05-17 22:59:33.145 INFO  [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-17 22:59:33.145 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-05-17 22:59:33.147 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-05-17 23:07:26.532 DEBUG [http-nio-8080-exec-10] u.c.k.c.c.FlightManagerController - Перегляд списку рейсів користувачем admin@skyair.ua
+2026-05-17 23:07:28.849 DEBUG [http-nio-8080-exec-4] u.c.k.c.c.AircraftManagerController - Перегляд списку літаків користувачем admin@skyair.ua
+2026-05-17 23:07:29.627 DEBUG [http-nio-8080-exec-7] u.c.k.c.c.PassengerManagerController - Перегляд списку пасажирів користувачем admin@skyair.ua, search=null
+2026-05-17 23:07:31.144 DEBUG [http-nio-8080-exec-8] u.c.k.c.c.AircraftManagerController - Перегляд списку літаків користувачем admin@skyair.ua
+2026-05-17 23:07:39.029 DEBUG [http-nio-8080-exec-2] u.c.k.c.c.FlightManagerController - Перегляд списку рейсів користувачем admin@skyair.ua
+2026-05-17 23:27:17.391 DEBUG [http-nio-8080-exec-2] u.c.k.c.c.FlightManagerController - Перегляд списку рейсів користувачем admin@skyair.ua
+2026-05-17 23:27:19.406 DEBUG [http-nio-8080-exec-3] u.c.k.c.c.AircraftManagerController - Перегляд списку літаків користувачем admin@skyair.ua
+2026-05-17 23:27:19.936 DEBUG [http-nio-8080-exec-5] u.c.k.c.c.PassengerManagerController - Перегляд списку пасажирів користувачем admin@skyair.ua, search=null
+2026-05-17 23:27:20.543 DEBUG [http-nio-8080-exec-6] u.c.k.c.c.TicketManagerController - Перегляд списку квитків користувачем admin@skyair.ua

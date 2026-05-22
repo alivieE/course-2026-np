@@ -46,6 +46,10 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link active" href="/">Головна</a></li>
                 <li class="nav-item"><a class="nav-link" href="/flights">Розклад рейсів</a></li>
+                <#if currentUser??>
+                    <li class="nav-item"><a class="nav-link" href="/booking">Оформлення квитка</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/my-tickets">Мої квитки</a></li>
+                </#if>
                 <#if currentUser?? && currentUser.role?string == "ADMIN">
                     <li class="nav-item">
                         <a class="nav-link text-warning fw-bold" href="/admin/flights">

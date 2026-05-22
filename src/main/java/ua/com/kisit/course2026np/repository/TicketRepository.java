@@ -1,6 +1,7 @@
 package ua.com.kisit.course2026np.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByServiceClass(Ticket.ServiceClass serviceClass);
     boolean existsByTicketNumber(String ticketNumber);
     long countByFlightId(Long flightId);
+    @Modifying
+    @Query("DELETE FROM Ticket t WHERE t.flight.id = :flightId")
+    void deleteByFlightId(@Param("flightId") Long flightId);
     long countByFlightIdAndStatus(Long flightId, Ticket.TicketStatus status);
     @Query("SELECT COALESCE(SUM(t.price), 0) FROM Ticket t " +
             "WHERE t.flight.id = :flightId AND t.status = :status")
